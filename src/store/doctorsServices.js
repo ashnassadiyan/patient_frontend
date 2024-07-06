@@ -24,6 +24,16 @@ export const getDoctorAvailability = (id) => {
   return http.get(`availability/availability/${id}`);
 };
 
+export const addDoctorAvailability = (data) => {
+  return http.post(`availability/create_availability`, {
+    Availability_data: data,
+  });
+};
+
+export const getAvailabilities = (id) => {
+  return http.post(`availability/availability/${id}`);
+};
+
 export const verifyOtp = (id, otp) => {
   return http.post(`http://127.0.0.1:8000/verify/${id}`, { otp: otp });
 };

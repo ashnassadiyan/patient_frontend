@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
@@ -14,6 +14,9 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import { loginService } from "../../store/patientServices";
 import { useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -22,6 +25,7 @@ const validationSchema = Yup.object({
 
 const Login = () => {
   const navigate = useNavigate();
+  const [eyesClosed, setEyesClosed] = useState(true);
 
   const formik = useFormik({
     initialValues: {
@@ -100,7 +104,6 @@ const Login = () => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
               id="password"
               autoComplete="current-password"
               value={formik.values.password}
@@ -108,6 +111,14 @@ const Login = () => {
               onBlur={formik.handleBlur}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              type={eyesClosed ? "password" : "text"}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={() => setEyesClosed(!eyesClosed)}>
+                    {eyesClosed ? <RemoveRedEyeIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                ),
+              }}
             />
 
             <Button

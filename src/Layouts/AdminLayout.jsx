@@ -21,7 +21,10 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import { Button, Stack, Typography } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+
 import LogoutIcon from "@mui/icons-material/Logout";
+import FolderSharedIcon from "@mui/icons-material/FolderShared";
 
 const drawerWidth = 240;
 
@@ -93,6 +96,7 @@ const adminPages = [
   { url: "/admin/dashboard", page: "Dashboard" },
   { url: "/admin/doctors", page: "Doctors" },
   { url: "/admin/appoinments", page: "Appoinments" },
+  { url: "/admin/patients", page: "Patients" },
   { url: "/admin/myprofile", page: "My Profile" },
 ];
 
@@ -100,6 +104,8 @@ const PatientLayout = () => {
   const location = useLocation();
   const path = location.pathname;
   const lastIndex = path.lastIndexOf("/");
+
+  console.log(path, "path");
   const textAfterLastSlash =
     lastIndex !== -1 ? path.substring(lastIndex + 1) : path;
   const theme = useTheme();
@@ -115,9 +121,10 @@ const PatientLayout = () => {
   };
 
   const getIcons = (page) => {
-    if (page === "Dashboard") return <HomeIcon />;
+    if (page === "Dashboard") return <HomeIcon sx={{}} />;
     if (page === "Doctors") return <CoPresentIcon />;
     if (page === "Appoinments") return <BedroomParentIcon />;
+    if (page === "Patients") return <FolderSharedIcon />;
     if (page === "My Profile") return <AccountBoxIcon />;
   };
 
@@ -126,6 +133,8 @@ const PatientLayout = () => {
     localStorage.removeItem("osc-user");
     window.location.href = "/login";
   };
+
+  console.log(["ashn"].includes("ashnaz"));
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -180,28 +189,30 @@ const PatientLayout = () => {
         <List>
           {adminPages.map((page, index) => (
             <ListItem key={index} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                onClick={() => navigate(`${page.url}`)}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
+              <Tooltip title={page.page} arrow>
+                <ListItemButton
+                  onClick={() => navigate(`${page.url}`)}
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  {getIcons(page.page)}
-                </ListItemIcon>
-                <ListItemText
-                  primary={page.page}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {getIcons(page.page)}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={page.page}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </Tooltip>
             </ListItem>
           ))}
         </List>

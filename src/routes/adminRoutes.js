@@ -12,6 +12,7 @@ import AddDoctors from "../pages/Admin/Doctors/AddDoctors";
 import EditDoctors from "../pages/Admin/Doctors/Edit/EditDoctors";
 import DoctorAvialability from "../pages/Admin/Avialability/DoctorAvialability";
 import AddAvailability from "../pages/Admin/Avialability/AddAvailability";
+import Patients from "../pages/Admin/Patients";
 
 export const adminRoutes = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const adminRoutes = createBrowserRouter([
       {
         path: "/admin/doctors",
         element: <Doctors />,
+      },
+      {
+        path: "/admin/patients",
+        element: <Patients />,
       },
       {
         path: "/admin/doctors/add",

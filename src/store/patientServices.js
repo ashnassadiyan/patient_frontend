@@ -1,11 +1,11 @@
 import http from "../http/http";
 
 export const registerService = (data) => {
-  return http.post("http://127.0.0.1:8000/patient/create_patient", data);
+  return http.post("patient/create_patient", data);
 };
 
 export const verifyOtp = (patient_id, otp) => {
-  return http.post(`http://127.0.0.1:8000/patient/verify`, {
+  return http.post(`patient/verify`, {
     otp: otp,
     patient_id,
   });
@@ -13,4 +13,11 @@ export const verifyOtp = (patient_id, otp) => {
 
 export const loginService = (data) => {
   return http.post("auth/login", data);
+};
+
+export const getPatients = (filterFields) => {
+  const { firstName, lastName, page } = filterFields;
+  return http.get(
+    `patient/get_patients?firstName=${firstName}&lastName=${lastName}&page=${page}`
+  );
 };
