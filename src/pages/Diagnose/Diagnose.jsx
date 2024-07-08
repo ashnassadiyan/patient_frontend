@@ -1,101 +1,171 @@
+import { useReactMediaRecorder } from "react-media-recorder";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import MicIcon from "@mui/icons-material/Mic";
 import {
   Button,
   Card,
-  CardActions,
+  CardActionArea,
   CardContent,
   CardHeader,
   IconButton,
   Stack,
-  Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import MicIcon from "@mui/icons-material/Mic";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import ClearIcon from "@mui/icons-material/Clear";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
 
-const Diagnose = () => {
-  const [isRecording, setIsRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
-  const [audioBlob, setAudioBlob] = useState(null);
-  const audioChunks = useRef([]);
+const Diagnose = (props) => {
+  const [second, setSecond] = useState("00");
+  const [minute, setMinute] = useState("00");
+  const [isActive, setIsActive] = useState(false);
+  const [counter, setCounter] = useState(0);
+  const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
 
-  const startRecording = async () => {
+  useEffect(() => {
+    let intervalId;
+
+    if (isActive) {
+      intervalId = setInterval(() => {
+        const secondCounter = counter % 60;
+        const minuteCounter = Math.floor(counter / 60);
+
+        let computedSecond =
+          String(secondCounter).length === 1
+            ? `0${secondCounter}`
+            : secondCounter;
+        let computedMinute =
+          String(minuteCounter).length === 1
+            ? `0${minuteCounter}`
+            : minuteCounter;
+
+        setSecond(computedSecond);
+        setMinute(computedMinute);
+
+        setCounter((counter) => counter + 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isActive, counter]);
+
+  const {
+    status,
+    startRecording,
+    stopRecording,
+    pauseRecording,
+    mediaBlobUrl: newMediaBlobUrl,
+  } = useReactMediaRecorder({
+    video: false,
+    audio: true,
+    echoCancellation: true,
+    onStop: (blobUrl) => setMediaBlobUrl(blobUrl),
+  });
+
+  useEffect(() => {
+    stopRecording();
+    if (newMediaBlobUrl) {
+      setMediaBlobUrl(newMediaBlobUrl);
+    }
+  }, [newMediaBlobUrl]);
+
+  const uploadRecording = async (blobUrl) => {
+    const response = await fetch(blobUrl);
+    const blob = await response.blob();
+    const formData = new FormData();
+    formData.append("file", blob, "recording.mp3");
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-
-      recorder.ondataavailable = (event) => {
-        audioChunks.current.push(event.data);
-      };
-
-      recorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks.current, { type: "audio/wav" });
-        setAudioBlob(audioBlob);
-        audioChunks.current = [];
-      };
-
-      recorder.start();
-      setMediaRecorder(recorder);
-      setIsRecording(true);
-    } catch (err) {
-      console.error("Error accessing microphone", err);
+      const result = await axios.post("/your-api-endpoint", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("File uploaded successfully", result.data);
+    } catch (error) {
+      console.error("Error uploading file", error);
     }
   };
 
-  const stopRecording = () => {
-    if (mediaRecorder) {
-      mediaRecorder.stop();
-      setIsRecording(false);
+  const handleStopRecording = () => {
+    stopRecording();
+    pauseRecording();
+    if (mediaBlobUrl) {
+      uploadRecording(mediaBlobUrl);
     }
   };
 
-  const uploadAudio = async () => {
-    if (audioBlob) {
-      const formData = new FormData();
-      formData.append("file", audioBlob, "audio.wav");
-
-      try {
-        const response = await axios.post("YOUR_UPLOAD_URL", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log("Upload successful", response.data);
-      } catch (error) {
-        console.error("Error uploading file", error);
-      }
-    }
-  };
+  console.log(mediaBlobUrl, "mediaBlobUrl");
 
   return (
     <Card variant="outlined">
       <CardHeader title="Diagnose" />
       <CardContent>
-        <Stack
-          direction={"row"}
-          sx={{ alignItems: "center", justifyContent: "center" }}
-        >
-          <IconButton className="circle">
-            <MicIcon />
-          </IconButton>
-        </Stack>
-      </CardContent>
-      <CardActions>
-        <Stack>
-          <Button
-            startIcon={<ChevronLeftIcon />}
-            // onClick={() => navigate(-1)}
-            variant="outlined"
-            sx={{ color: "black" }}
+        <div>
+          <h4
+            style={{
+              marginLeft: "10px",
+              textTransform: "capitalize",
+              fontFamily: "sans-serif",
+              fontSize: "18px",
+            }}
           >
-            BacK
-          </Button>
-        </Stack>
-      </CardActions>
+            {status}
+          </h4>
+
+          {isActive && (
+            <div>
+              <video src={mediaBlobUrl} controls loop />
+            </div>
+          )}
+
+          <Stack direction={"row"} sx={{ justifyContent: "center" }}>
+            <IconButton
+              onClick={() => {
+                if (!isActive) {
+                  startRecording();
+                } else {
+                  pauseRecording();
+                  // handleStopRecording();
+                }
+
+                setIsActive(!isActive);
+              }}
+            >
+              <MicIcon />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                if (!isActive) {
+                  startRecording();
+                } else {
+                  pauseRecording();
+                  // handleStopRecording();
+                }
+
+                setIsActive(!isActive);
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+
+            <IconButton
+              onClick={() => {
+                if (!isActive) {
+                  startRecording();
+                } else {
+                  pauseRecording();
+                  // handleStopRecording();
+                }
+
+                setIsActive(!isActive);
+              }}
+            >
+              <StopCircleIcon />
+            </IconButton>
+          </Stack>
+        </div>
+      </CardContent>
+      <CardActionArea></CardActionArea>
     </Card>
   );
 };

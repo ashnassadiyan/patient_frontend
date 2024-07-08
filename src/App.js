@@ -5,6 +5,7 @@ import { authorizedPatientsRoutes } from "./routes/authorizedPatientsRoutes";
 import { adminRoutes } from "./routes/adminRoutes";
 import { Provider } from "react-redux";
 import store from "./store/index";
+import CustomAlert from "./components/CustomAlerts/CustomAlert";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("osc-user"));
@@ -20,9 +21,8 @@ const App = () => {
 
   return (
     <div className="App">
-      <Provider store={store}>
-        <RouterProvider router={router} />
-      </Provider>
+      <CustomAlert />
+      <RouterProvider router={router} />
     </div>
   );
 };

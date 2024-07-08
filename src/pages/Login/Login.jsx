@@ -17,6 +17,9 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import { useDispatch, useSelector } from "react-redux";
+import { openAlert } from "../../store/slices/alertSlice";
+import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -25,6 +28,7 @@ const validationSchema = Yup.object({
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [eyesClosed, setEyesClosed] = useState(true);
 
   const formik = useFormik({
@@ -37,6 +41,10 @@ const Login = () => {
       loginService(values)
         .then((response) => {
           console.log(response.data.data, "data");
+          openAlert({
+            status: SUCCESS,
+            message: "success",
+          });
           localStorage.setItem("osc-user", JSON.stringify(response.data.data));
           localStorage.setItem(
             "osc-token",
@@ -55,10 +63,19 @@ const Login = () => {
           }
         })
         .catch((error) => {
+          dispatch(
+            openAlert({
+              status: ERROR,
+              message: "something went wrong",
+            })
+          );
           console.log(error);
         });
     },
   });
+
+  const state = useSelector((state) => state);
+  console.log(state, "state");
 
   return (
     <div>
@@ -69,6 +86,9 @@ const Login = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            padding: "20px",
+            boxShadow: "2px 6px 53px 0px rgba(0,0,0,0.37)",
+            borderRadius: "20px",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
