@@ -6,6 +6,8 @@ import { adminRoutes } from "./routes/adminRoutes";
 import { Provider } from "react-redux";
 import store from "./store/index";
 import CustomAlert from "./components/CustomAlerts/CustomAlert";
+import { Backdrop } from "@mui/material";
+import CustomLoader from "./components/CustomLoader/CustomLoader";
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem("osc-user"));
@@ -21,8 +23,9 @@ const App = () => {
 
   return (
     <div className="App">
-      <CustomAlert />
+      <CustomLoader />
       <RouterProvider router={router} />
+      <CustomAlert />
     </div>
   );
 };

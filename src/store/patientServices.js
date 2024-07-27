@@ -15,9 +15,17 @@ export const loginService = (data) => {
   return http.post("auth/login", data);
 };
 
+export const verifyToken = () => {
+  return http.get("auth/token");
+};
+
 export const getPatients = (filterFields) => {
   const { firstName, lastName, page } = filterFields;
   return http.get(
     `patient/get_patients?firstName=${firstName}&lastName=${lastName}&page=${page}`
   );
+};
+
+export const diagnose = (data, id) => {
+  return http.post(`patient/diagnose/${id}`, data);
 };

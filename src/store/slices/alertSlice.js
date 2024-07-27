@@ -5,6 +5,7 @@ const initialState = {
   alertOpen: false,
   alertStatus: SUCCESS,
   messages: "",
+  loading: false,
 };
 
 export const alertSlice = createSlice({
@@ -21,8 +22,15 @@ export const alertSlice = createSlice({
       state.alertOpen = false;
       state.messages = "";
     },
+    startLoading: (state, action) => {
+      state.loading = true;
+    },
+    stopLoading: (state, action) => {
+      state.loading = false;
+    },
   },
 });
 
-export const { openAlert, closeAlert } = alertSlice.actions;
+export const { openAlert, closeAlert, startLoading, stopLoading } =
+  alertSlice.actions;
 export default alertSlice.reducer;

@@ -1,52 +1,41 @@
 import { useReactMediaRecorder } from "react-media-recorder";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import MicIcon from "@mui/icons-material/Mic";
 import {
   Button,
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardHeader,
+  Grid,
   IconButton,
   Stack,
+  Tooltip,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import "./Diagnose.css";
+import http from "../../http/http";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { useDispatch } from "react-redux";
+import {
+  openAlert,
+  startLoading,
+  stopLoading,
+} from "../../store/slices/alertSlice";
+import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
+import { isEmpty } from "lodash";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { useNavigate } from "react-router-dom";
 
 const Diagnose = (props) => {
-  const [second, setSecond] = useState("00");
-  const [minute, setMinute] = useState("00");
+  const dispatch = useDispatch();
   const [isActive, setIsActive] = useState(false);
-  const [counter, setCounter] = useState(0);
   const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
-
-  useEffect(() => {
-    let intervalId;
-
-    if (isActive) {
-      intervalId = setInterval(() => {
-        const secondCounter = counter % 60;
-        const minuteCounter = Math.floor(counter / 60);
-
-        let computedSecond =
-          String(secondCounter).length === 1
-            ? `0${secondCounter}`
-            : secondCounter;
-        let computedMinute =
-          String(minuteCounter).length === 1
-            ? `0${minuteCounter}`
-            : minuteCounter;
-
-        setSecond(computedSecond);
-        setMinute(computedMinute);
-
-        setCounter((counter) => counter + 1);
-      }, 1000);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isActive, counter]);
+  const [symptoms, setSymptoms] = useState([]);
+  const nativigate = useNavigate();
 
   const {
     status,
@@ -62,110 +51,190 @@ const Diagnose = (props) => {
   });
 
   useEffect(() => {
-    stopRecording();
     if (newMediaBlobUrl) {
       setMediaBlobUrl(newMediaBlobUrl);
     }
   }, [newMediaBlobUrl]);
 
   const uploadRecording = async (blobUrl) => {
+    const user = JSON.parse(localStorage.getItem("osc-user"));
     const response = await fetch(blobUrl);
     const blob = await response.blob();
     const formData = new FormData();
-    formData.append("file", blob, "recording.mp3");
+    formData.append("file", blob, `${user.id}_recording.mp3`);
 
     try {
-      const result = await axios.post("/your-api-endpoint", formData, {
+      const result = await http.post("patient/upload_audio", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log("File uploaded successfully", result.data);
+      dispatch(stopLoading());
+      dispatch(openAlert({ status: SUCCESS, message: "Successfully updated" }));
+      const getSymptomsOnly = JSON.parse(result.data.transcribed).filter(
+        (s) => s.entity_group === "SIGN_SYMPTOM"
+      );
+      setSymptoms([...getSymptomsOnly]);
+      console.log(getSymptomsOnly, "getSymptomsOnly");
+      gotoNext();
     } catch (error) {
+      dispatch(stopLoading());
+      dispatch(openAlert({ status: ERROR, message: "Something went wrong" }));
       console.error("Error uploading file", error);
     }
   };
 
   const handleStopRecording = () => {
     stopRecording();
-    pauseRecording();
-    if (mediaBlobUrl) {
-      uploadRecording(mediaBlobUrl);
-    }
   };
 
-  console.log(mediaBlobUrl, "mediaBlobUrl");
+  const handleMicButtonClick = () => {
+    if (status !== "recording") {
+      startRecording();
+    } else {
+      pauseRecording();
+    }
+    setIsActive(!isActive);
+  };
+
+  const handleClearRecording = () => {
+    stopRecording();
+    setMediaBlobUrl(null);
+    setIsActive(false);
+  };
+
+  const gotoNext = () => {
+    nativigate("/patient/symptoms", { state: symptoms });
+  };
+
+  const gotoInstruction = () => {
+    nativigate("/patient/instruction");
+  };
+
+  const getText =
+    status === "idle" ? "Click the mic icon to start the recording" : status;
 
   return (
     <Card variant="outlined">
       <CardHeader title="Diagnose" />
       <CardContent>
-        <div>
-          <h4
-            style={{
-              marginLeft: "10px",
-              textTransform: "capitalize",
-              fontFamily: "sans-serif",
-              fontSize: "18px",
-            }}
-          >
-            {status}
-          </h4>
-
-          {isActive && (
-            <div>
-              <video src={mediaBlobUrl} controls loop />
-            </div>
-          )}
-
-          <Stack direction={"row"} sx={{ justifyContent: "center" }}>
-            <IconButton
-              onClick={() => {
-                if (!isActive) {
-                  startRecording();
-                } else {
-                  pauseRecording();
-                  // handleStopRecording();
-                }
-
-                setIsActive(!isActive);
+        <Grid container>
+          <Grid item md={6} sm={12} xs={12}>
+            <img
+              alt="google_logo"
+              className="instrunction"
+              src="/images/recording.jpg"
+            />
+          </Grid>
+          <Grid item md={6} sm={12} xs={12}>
+            <Stack
+              sx={{
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+                justifyContent: "center",
               }}
             >
-              <MicIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                if (!isActive) {
-                  startRecording();
-                } else {
-                  pauseRecording();
-                  // handleStopRecording();
-                }
+              <h4
+                style={{
+                  marginLeft: "10px",
+                  textTransform: "capitalize",
+                  fontFamily: "sans-serif",
+                  fontSize: "18px",
+                }}
+              >
+                {getText}
+              </h4>
 
-                setIsActive(!isActive);
-              }}
-            >
-              <ClearIcon />
-            </IconButton>
+              <Stack
+                direction={"row"}
+                sx={{ justifyContent: "center", gap: "10px" }}
+              >
+                <Tooltip
+                  title={
+                    status === "recording"
+                      ? "Recording in progress"
+                      : "Click here to start recording "
+                  }
+                >
+                  <IconButton
+                    className={status === "recording" ? "glowingRed" : ""}
+                    onClick={handleMicButtonClick}
+                  >
+                    <MicIcon />
+                  </IconButton>
+                </Tooltip>
 
-            <IconButton
-              onClick={() => {
-                if (!isActive) {
-                  startRecording();
-                } else {
-                  pauseRecording();
-                  // handleStopRecording();
-                }
+                {["paused", "recording"].includes(status) && (
+                  <Tooltip title="Click here to clear the recording ">
+                    <IconButton onClick={handleClearRecording}>
+                      <ClearIcon color="error" />
+                    </IconButton>
+                  </Tooltip>
+                )}
 
-                setIsActive(!isActive);
-              }}
-            >
-              <StopCircleIcon />
-            </IconButton>
-          </Stack>
-        </div>
+                {["paused", "recording"].includes(status) && (
+                  <Tooltip title="Click here to stop the recording ">
+                    <IconButton onClick={handleStopRecording}>
+                      <StopCircleIcon color="warning" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {["stopped"].includes(status) && (
+                  <Tooltip title="Click here to upload the recorded audio ">
+                    <IconButton
+                      onClick={() => {
+                        dispatch(startLoading());
+                        setTimeout(() => {
+                          if (mediaBlobUrl) {
+                            uploadRecording(mediaBlobUrl);
+                          }
+                        }, 5000);
+                      }}
+                    >
+                      <FileUploadIcon color="success" />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Stack>
+
+              <Stack sx={{ mt: "10px" }}>
+                {["paused", "stopped"].includes(status) && mediaBlobUrl && (
+                  <div>
+                    <audio src={mediaBlobUrl} controls />
+                  </div>
+                )}
+              </Stack>
+            </Stack>
+          </Grid>
+        </Grid>
       </CardContent>
-      <CardActionArea></CardActionArea>
+
+      <CardActions>
+        <Stack
+          direction={"row"}
+          sx={{ width: "100%", justifyContent: "space-between" }}
+        >
+          <Button
+            onClick={() => gotoInstruction()}
+            variant="outlined"
+            sx={{ color: "black" }}
+            startIcon={<ChevronLeftIcon />}
+          >
+            Instructions
+          </Button>
+          <Button
+            onClick={() => gotoNext()}
+            variant="outlined"
+            sx={{ color: "black" }}
+            endIcon={<ChevronRightIcon />}
+            disabled={isEmpty(symptoms)}
+          >
+            Next
+          </Button>
+        </Stack>
+      </CardActions>
     </Card>
   );
 };

@@ -40,11 +40,13 @@ const Login = () => {
     onSubmit: (values) => {
       loginService(values)
         .then((response) => {
-          console.log(response.data.data, "data");
-          openAlert({
-            status: SUCCESS,
-            message: "success",
-          });
+          dispatch(
+            openAlert({
+              status: SUCCESS,
+              message: "success",
+            })
+          );
+
           localStorage.setItem("osc-user", JSON.stringify(response.data.data));
           localStorage.setItem(
             "osc-token",
@@ -69,7 +71,6 @@ const Login = () => {
               message: "something went wrong",
             })
           );
-          console.log(error);
         });
     },
   });

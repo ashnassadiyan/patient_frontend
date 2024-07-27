@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -23,7 +23,23 @@ import CoPresentIcon from "@mui/icons-material/CoPresent";
 import { Button, Stack, Typography } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
+import { verifyToken } from "../store/patientServices";
+
+import { makeStyles } from "@mui/styles";
+
 const drawerWidth = 240;
+const useStyles = makeStyles((theme) => ({
+  navbar: {
+    backgroundColor: "#ffff !important",
+    transition: "background-color 0.3s ease",
+    boxShadow: "none",
+    // borderBottom: "1px solid rgba(0, 0, 0, 0.20)",
+  },
+  navbarScrolled: {
+    backgroundColor: "#ffff", // White background when scrolled
+    boxShadow: "none", // Add a subtle shadow
+  },
+}));
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -104,7 +120,7 @@ const PatientLayout = () => {
   const textAfterLastSlash =
     lastIndex !== -1 ? path.substring(lastIndex + 1) : path;
   const theme = useTheme();
-
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -129,10 +145,24 @@ const PatientLayout = () => {
     navigate("/patient/instruction");
   };
 
+  useEffect(() => {
+    verifyToken()
+      .then(() => {})
+      .catch((error) => {
+        console.log();
+      });
+  }, []);
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} enableColorOnDark>
+      <AppBar
+        position="fixed"
+        open={open}
+        enableColorOnDark
+        className={`${classes.navbar}`}
+        sx={{ display: { md: "block", sm: "none", xs: "none" } }}
+      >
         <Toolbar>
           <IconButton
             aria-label="open drawer"
@@ -141,7 +171,7 @@ const PatientLayout = () => {
             sx={{
               marginRight: 5,
               ...(open && { display: "none" }),
-              color: "white",
+              color: "black",
               display: { md: "block", sm: "none", xs: "none" },
             }}
           >
@@ -151,7 +181,7 @@ const PatientLayout = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ color: "white", width: "100%", textAlign: "start" }}
+            sx={{ width: "100%", textAlign: "start" }}
           >
             Patient Dashboard
           </Typography>
@@ -184,7 +214,11 @@ const PatientLayout = () => {
           </Stack>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        open={open}
+        sx={{ display: { md: "block", sm: "none", xs: "none" } }}
+      >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
@@ -229,15 +263,61 @@ const PatientLayout = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: 4,
           height: "100vh",
           overflow: "auto",
-          paddingTop: "50px",
+          paddingTop: { md: "50px", sm: "5px", xs: "5px" },
           bgcolor: "#f6f3f3",
         }}
       >
-        <DrawerHeader />
+        <Stack
+          direction={"row"}
+          sx={{
+            alignItems: "center",
+            justifyContent: "flex-end",
+            width: "100%",
+            gap: "20px",
+            mb: "10px",
+            display: { sm: "flex", xs: "flex", md: "none" },
+          }}
+        >
+          <Button
+            onClick={() => goToDiagnose()}
+            variant="outlined"
+            sx={{ color: "black", bgcolor: "white" }}
+            startIcon={<LocalHospitalIcon />}
+          >
+            Diagnose
+          </Button>
+        </Stack>
         <Outlet />
+        <AppBar
+          position="fixed"
+          color="primary"
+          enableColorOnDark
+          className={`${classes.navbar}`}
+          sx={{
+            top: "auto",
+            bottom: 0,
+            display: { md: "none", sm: "block" },
+          }}
+        >
+          <Toolbar>
+            <Stack
+              direction={"row"}
+              sx={{ gap: "35px", justifyContent: "space-between" }}
+            >
+              {patientPages.map((page, index) => (
+                <IconButton onClick={() => navigate(`${page.url}`)} key={index}>
+                  {getIcons(page.page)}
+                </IconButton>
+              ))}
+              <IconButton>
+                <LogoutIcon />
+              </IconButton>
+            </Stack>
+          </Toolbar>
+        </AppBar>
       </Box>
     </Box>
   );
