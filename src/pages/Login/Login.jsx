@@ -18,7 +18,11 @@ import { IconButton } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useDispatch, useSelector } from "react-redux";
-import { openAlert } from "../../store/slices/alertSlice";
+import {
+  openAlert,
+  startLoading,
+  stopLoading,
+} from "../../store/slices/alertSlice";
 import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
 
 const validationSchema = Yup.object({
@@ -38,8 +42,10 @@ const Login = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      dispatch(startLoading());
       loginService(values)
         .then((response) => {
+          dispatch(stopLoading());
           dispatch(
             openAlert({
               status: SUCCESS,
@@ -65,6 +71,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
+          dispatch(stopLoading());
           dispatch(
             openAlert({
               status: ERROR,

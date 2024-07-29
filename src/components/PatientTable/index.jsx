@@ -7,8 +7,9 @@ import {
   TableRow,
 } from "@mui/material";
 import React from "react";
+import EditPatient from "./EditPatient";
 
-const Index = ({ data }) => {
+const Index = ({ data, getAllPatients }) => {
   return (
     <TableContainer>
       <Table sx={{ minWidth: 650 }} aria-label="caption table">
@@ -30,7 +31,7 @@ const Index = ({ data }) => {
               <TableCell align="right">{row.lastName}</TableCell>
               <TableCell align="right">{row.email}</TableCell>
               <TableCell align="right">
-                {/* <EditDoctor data={row} /> */}
+                <EditPatient data={row} getAllPatients={getAllPatients} />
               </TableCell>
             </TableRow>
           ))}

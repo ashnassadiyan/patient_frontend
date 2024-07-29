@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 
 const CustomLoader = () => {
   const { loading } = useSelector((state) => state.alertStore);
-  console.log(loading, "state");
   return (
     <Backdrop
       sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 99 }}

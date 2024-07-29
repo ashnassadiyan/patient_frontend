@@ -154,7 +154,7 @@ const PatientLayout = () => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Patient Dashboard
+            Admin Dashboard
           </Typography>
           <Stack
             direction={"row"}

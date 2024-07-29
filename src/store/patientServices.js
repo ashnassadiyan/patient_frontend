@@ -26,6 +26,10 @@ export const getPatients = (filterFields) => {
   );
 };
 
+export const deletePatients = (id) => {
+  return http.delete(`patient/delete_patient/${id}`);
+};
+
 export const diagnose = (data, id) => {
   return http.post(`patient/diagnose/${id}`, data);
 };

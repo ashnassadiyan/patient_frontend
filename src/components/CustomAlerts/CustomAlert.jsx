@@ -15,8 +15,6 @@ const CustomAlert = () => {
     dispatch(closeAlert());
   };
 
-  console.log(alertOpen, "alertOpen");
-
   return (
     <Stack sx={{ zIndex: 10000, mt: "10px", p: "10px", zIndex: 999999 }}>
       <Snackbar

@@ -73,7 +73,11 @@ const AddDoctors = () => {
         </Button>
       </Stack>
       <Stack sx={{ mt: UPPER, gap: COZY }}>
-        <PatientTable data={patients} onPageChange={onPageChange} />
+        <PatientTable
+          data={patients}
+          onPageChange={onPageChange}
+          getAllPatients={getAllPatients}
+        />
         {/* <Stack direction={"row"} sx={{ justifyContent: "flex-end" }}>
           <Pagination
             count={filterFields.page}
