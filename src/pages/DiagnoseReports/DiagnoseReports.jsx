@@ -9,21 +9,26 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import ReportsTable from "../../components/ReportsTable/ReportsTable";
 import { getReports } from "../../store/patientServices";
+import { startLoading, stopLoading } from "../../store/slices/alertSlice";
 
 const DiagnoseReports = () => {
   const [data, setData] = useState([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("osc-user"));
-    console.log(user, "user");
+    dispatch(startLoading());
     getReports(user.id)
       .then((res) => {
+        dispatch(stopLoading());
         setData(res.data.reports);
         console.log(res, "res");
       })
-      .catch(() => {});
+      .catch(() => {
+        dispatch(stopLoading());
+      });
   }, []);
 
   return (

@@ -10,16 +10,27 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { getReport } from "../../store/patientServices";
+import {
+  openAlert,
+  startLoading,
+  stopLoading,
+} from "../../store/slices/alertSlice";
+import { useDispatch } from "react-redux";
+import { ERROR } from "../../components/CustomAlerts/constants";
+import { formatDateToYYYYMMDDHHMM } from "../../helpers/helper";
 
 function getSymptomsString(arr) {
   return arr.map((item) => item.symptom).join(", ");
 }
 
 const DiagnoseReport = () => {
-  const location = useLocation();
+  const nativigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const [diagnosedDetails, setDiagnosedDetails] = useState({
     doctor: "",
     disease: "",
@@ -27,12 +38,29 @@ const DiagnoseReport = () => {
   });
 
   useEffect(() => {
-    // setDiagnosedDetails(() => ({
-    //   symptoms: getSymptomsString(location.state),
-    //   doctor: "rheumatologist",
-    //   disease: "arthritis",
-    // }));
-  }, [location.state]);
+    dispatch(startLoading());
+    getReport(id)
+      .then((res) => {
+        dispatch(stopLoading());
+        console.log(res.data.report, "res.data.report");
+        setDiagnosedDetails(res.data.report);
+      })
+      .catch(() => {
+        dispatch(stopLoading());
+        dispatch(
+          openAlert({
+            message: "something went wrong",
+            status: ERROR,
+          })
+        );
+      });
+  }, []);
+
+  const gotoNext = () => {
+    nativigate(`/patient/makeAppoinment/${id}`, {
+      state: diagnosedDetails,
+    });
+  };
 
   return (
     <Card variant="outlined">
@@ -73,6 +101,13 @@ const DiagnoseReport = () => {
                 </Typography>
                 <Stack direction={"row"}>{diagnosedDetails.doctor}</Stack>
               </Stack>
+
+              <Stack sx={{ alignItems: "flex-start" }}>
+                <Typography sx={{ fontWeight: 600 }}>Diagnosed At</Typography>
+                <Stack direction={"row"}>
+                  {formatDateToYYYYMMDDHHMM(diagnosedDetails.created)}
+                </Stack>
+              </Stack>
             </Stack>
           </Grid>
         </Grid>
@@ -83,7 +118,7 @@ const DiagnoseReport = () => {
           sx={{ width: "100%", justifyContent: "flex-end" }}
         >
           <Button
-            // onClick={() => diagnose()}
+            onClick={() => gotoNext()}
             variant="outlined"
             sx={{ color: "black" }}
             endIcon={<ChevronRightIcon />}

@@ -57,3 +57,7 @@ export const fetchDetails = async () => {
     })
     .catch(() => {});
 };
+
+export const getReport = async (id) => {
+  return http.get(`patient/get_diagnosed_report/${id}`);
+};

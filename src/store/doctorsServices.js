@@ -2,7 +2,12 @@ import axios from "axios";
 import http from "../http/http";
 
 export const getDoctors = (filterFields) => {
-  const { firstName, lastName, specialized, page } = filterFields;
+  const {
+    firstName = "",
+    lastName = "",
+    specialized = "",
+    page = 1,
+  } = filterFields;
   return http.get(
     `doctor/get_doctors?firstName=${firstName}&lastName=${lastName}&specialized=${specialized}&page=${page}`
   );

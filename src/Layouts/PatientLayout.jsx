@@ -117,8 +117,7 @@ const PatientLayout = () => {
   const navigate = useNavigate();
   const path = location.pathname;
   const lastIndex = path.lastIndexOf("/");
-  const textAfterLastSlash =
-    lastIndex !== -1 ? path.substring(lastIndex + 1) : path;
+  console.log(path, "textAfterLastSlash");
   const theme = useTheme();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -129,11 +128,24 @@ const PatientLayout = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const getIcons = (page) => {
-    if (page === "Dashboard") return <HomeIcon />;
-    if (page === "Diagnosed Reports") return <CoPresentIcon />;
-    if (page === "My Appointments") return <BedroomParentIcon />;
-    if (page === "My Profile") return <AccountBoxIcon />;
+  const getIcons = (page, url) => {
+    console.log(url, "url");
+    if (page === "Dashboard")
+      return <HomeIcon sx={{ color: url === path ? "#03a9f4 " : "black" }} />;
+    if (page === "Diagnosed Reports")
+      return (
+        <CoPresentIcon sx={{ color: url === path ? "#03a9f4 " : "black" }} />
+      );
+    if (page === "My Appointments")
+      return (
+        <BedroomParentIcon
+          sx={{ color: url === path ? "#03a9f4 " : "black" }}
+        />
+      );
+    if (page === "My Profile")
+      return (
+        <AccountBoxIcon sx={{ color: url === path ? "#03a9f4 " : "black" }} />
+      );
   };
   const logout = () => {
     localStorage.removeItem("osc-token");
@@ -247,11 +259,14 @@ const PatientLayout = () => {
                     justifyContent: "center",
                   }}
                 >
-                  {getIcons(page.page)}
+                  {getIcons(page.page, page.url)}
                 </ListItemIcon>
                 <ListItemText
                   primary={page.page}
-                  sx={{ opacity: open ? 1 : 0 }}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color: page.url === path ? "#03a9f4" : "black",
+                  }}
                 />
               </ListItemButton>
             </ListItem>
@@ -309,7 +324,7 @@ const PatientLayout = () => {
             >
               {patientPages.map((page, index) => (
                 <IconButton onClick={() => navigate(`${page.url}`)} key={index}>
-                  {getIcons(page.page)}
+                  {getIcons(page.page, page.url)}
                 </IconButton>
               ))}
               <IconButton>
