@@ -8,6 +8,7 @@ import {
   CardHeader,
   Chip,
   FormControl,
+  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -22,6 +23,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { isEmpty } from "lodash";
+
+function getSymptomsString(arr) {
+  return arr.map((item) => item.symptom).join(", ");
+}
 
 const Symptoms = () => {
   const location = useLocation();
@@ -66,7 +71,18 @@ const Symptoms = () => {
   };
 
   const diagnose = () => {
-    //  nativigate("/patient/symptoms", { state: symptoms });
+    const user = JSON.parse(localStorage.getItem("osc-user"));
+
+    const data = {
+      doctor: "rheumatologist",
+      disease: "arthritis",
+      symptoms: getSymptomsString(symptomsSets),
+    };
+
+    // diagnoseReport(user?.id, data)
+    //   .then((res) => {})
+    //   .catch(() => {});
+    // nativigate("/patient/diagnoseReport", { state: symptomsSets });
   };
 
   const gotoDiagnose = () => {
@@ -77,105 +93,117 @@ const Symptoms = () => {
     <Card variant="outlined">
       <CardHeader title="Symptoms" />
       <CardContent>
-        <Box
-          sx={{
-            backgroundColor: "#fff",
-            borderRadius: "21px",
-            width: "100%",
-            p: "24px 24px",
-          }}
-        >
-          <Typography sx={{ fontSize: "14px", fontWeight: 600, mb: "32px" }}>
-            Here are the skills you have mentioned in your resume. You can
-            update them as you need.
-          </Typography>
-          <Typography sx={{ fontSize: "12px", fontWeight: 400 }}>
-            symptom
-          </Typography>
-          <FormControl
-            sx={{ m: 1, width: "100%", mt: "12px" }}
-            variant="outlined"
-          >
-            <InputLabel htmlFor="outlined-adornment-password">
-              Add symptom
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              value={symptom}
-              onChange={(e) => setSymptom(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    edge="end"
-                    onClick={() => {
-                      selectedIndex ? saveEdit() : handleAdd();
-                    }}
-                    sx={{ color: "#006CD9" }}
-                  >
-                    +
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="symptom"
+        <Grid container>
+          <Grid item md={6} sm={12}>
+            <img
+              alt="google_logo"
+              className="instrunction"
+              src="/images/symptoms.jpg"
             />
-          </FormControl>
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              padding: "12px 0",
-              gap: "4px",
-            }}
-          >
-            {symptomsSets &&
-              symptomsSets.map((newSymp, index) => (
-                <Chip
-                  key={index}
-                  sx={{
-                    border: "1px solid rgba(0, 0, 0, 0.15)",
-                    borderRadius: "4px",
-                    fontSize: "13px",
-                    backgroundColor: "#fff",
-                    "& .MuiChip-deleteIcon": {
-                      color: "#fff",
-                      borderColor: "#555555",
-                      backgroundColor: "#555555",
-                      borderRadius: "100%",
-                      width: "8px",
-                      height: "8px",
-                    },
-                  }}
-                  label={
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Typography>{newSymp?.symptom}</Typography>
+          </Grid>
+          <Grid item md={6} sm={12}>
+            <Box
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: "21px",
+                width: "100%",
+                p: { md: "24px 24px", sm: "10px" },
+              }}
+            >
+              <Typography
+                sx={{ fontSize: "14px", fontWeight: 600, mb: "32px" }}
+              >
+                Here are the symptoms you have recorded
+              </Typography>
+              <Typography sx={{ fontSize: "12px", fontWeight: 400 }}>
+                symptom
+              </Typography>
+              <FormControl
+                sx={{ m: 1, width: "100%", mt: "12px" }}
+                variant="outlined"
+              >
+                <InputLabel htmlFor="outlined-adornment-password">
+                  Add symptom
+                </InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  value={symptom}
+                  onChange={(e) => setSymptom(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
                       <IconButton
-                        onClick={(e) => {
-                          handleEdit(newSymp?.symptom, index);
+                        aria-label="toggle password visibility"
+                        edge="end"
+                        onClick={() => {
+                          selectedIndex ? saveEdit() : handleAdd();
                         }}
-                        sx={{ marginLeft: "4px", color: "#555555" }}
+                        sx={{ color: "#006CD9" }}
                       >
-                        <EditIcon
-                          fontSize="small"
-                          sx={{
-                            width: "8px",
-                            height: "8px",
-                            color: "#006CD9",
-                          }}
-                        />
+                        +
                       </IconButton>
-                    </Box>
+                    </InputAdornment>
                   }
-                  deleteIcon={
-                    <CloseIcon
-                      sx={{ width: "8px", height: "8px", color: "#fff" }}
-                    />
-                  }
-                  onDelete={() => handleDelete(index)}
+                  label="symptom"
                 />
-              ))}
-          </Box>
-        </Box>
+              </FormControl>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  padding: "20px 20px",
+                  gap: "4px",
+                }}
+              >
+                {symptomsSets &&
+                  symptomsSets.map((newSymp, index) => (
+                    <Chip
+                      key={index}
+                      sx={{
+                        border: "1px solid rgba(0, 0, 0, 0.15)",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        backgroundColor: "#fff",
+                        "& .MuiChip-deleteIcon": {
+                          color: "#fff",
+                          borderColor: "#555555",
+                          backgroundColor: "#555555",
+                          borderRadius: "100%",
+                          width: "8px",
+                          height: "8px",
+                        },
+                      }}
+                      label={
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Typography>{newSymp?.symptom}</Typography>
+                          <IconButton
+                            onClick={(e) => {
+                              handleEdit(newSymp?.symptom, index);
+                            }}
+                            sx={{ marginLeft: "4px", color: "#555555" }}
+                          >
+                            <EditIcon
+                              fontSize="small"
+                              sx={{
+                                width: "8px",
+                                height: "8px",
+                                color: "#006CD9",
+                              }}
+                            />
+                          </IconButton>
+                        </Box>
+                      }
+                      deleteIcon={
+                        <CloseIcon
+                          sx={{ width: "8px", height: "8px", color: "#fff" }}
+                        />
+                      }
+                      onDelete={() => handleDelete(index)}
+                    />
+                  ))}
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </CardContent>
       <CardActions>
         <Stack
@@ -188,7 +216,7 @@ const Symptoms = () => {
             sx={{ color: "black" }}
             startIcon={<ChevronLeftIcon />}
           >
-            Instructions
+            Record
           </Button>
           <Button
             onClick={() => diagnose()}
@@ -197,7 +225,7 @@ const Symptoms = () => {
             endIcon={<ChevronRightIcon />}
             disabled={isEmpty(symptomsSets)}
           >
-            Next
+            Diagnose
           </Button>
         </Stack>
       </CardActions>

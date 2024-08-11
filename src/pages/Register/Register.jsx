@@ -20,6 +20,9 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { registerService } from "../../store/patientServices";
+import { useDispatch } from "react-redux";
+import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
+import { openAlert } from "../../store/slices/alertSlice";
 
 const Illustration = styled("div")({
   textAlign: "center",
@@ -67,6 +70,7 @@ const Register = () => {
     gender: "male",
     userType: "patient",
   };
+  const dispatch = useDispatch();
 
   const handleSubmit = (values, { setSubmitting }) => {
     registerPatient(values);
@@ -76,13 +80,23 @@ const Register = () => {
   const registerPatient = async (values) => {
     await registerService(values)
       .then((response) => {
+        dispatch(
+          openAlert({
+            status: SUCCESS,
+            message: "Registered successfully",
+          })
+        );
         localStorage.setItem("osc-user", JSON.stringify(response.data.patient));
         localStorage.setItem("osc-token", JSON.stringify(response.data.token));
         window.location.href = "/verify";
       })
       .catch((error) => {
-        alert("something went wrong");
-        console.log(error, "error");
+        dispatch(
+          openAlert({
+            status: ERROR,
+            message: error?.response?.data?.detail || "something went wrong",
+          })
+        );
       });
   };
 
@@ -188,7 +202,6 @@ const Register = () => {
                 >
                   {({ isSubmitting, errors }) => (
                     <Form>
-                      {console.log(errors, "errors")}
                       <Grid container rowSpacing={3.5}>
                         <Grid item xs={12}>
                           <Grid container columnSpacing={2} rowSpacing={4}>

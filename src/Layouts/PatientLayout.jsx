@@ -263,10 +263,10 @@ const PatientLayout = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 4,
+          p: "30px 15px",
           height: "100vh",
           overflow: "auto",
-          paddingTop: { md: "50px", sm: "5px", xs: "5px" },
+          paddingTop: { md: "80px", sm: "5px", xs: "5px" },
           bgcolor: "#f6f3f3",
         }}
       >

@@ -7,11 +7,16 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
 import { addDoctorAvailability } from "../../../store/doctorsServices";
 import CardHolder from "../../../components/CardHolder/CardHolder";
+import { useDispatch } from "react-redux";
+import { openAlert } from "../../../store/slices/alertSlice";
+import { ERROR, SUCCESS } from "../../../components/CustomAlerts/constants";
+import { isEmpty } from "lodash";
 
 const AddAvailability = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const { firstName, lastName, specialized } = location.state;
   console.log(location.state, "location.state");
 
@@ -40,18 +45,52 @@ const AddAvailability = () => {
       ranges.selection.endDate
     );
     datesRangs = datesRangs.map((a) => {
-      return { doctor_id: id, available: a };
+      return {
+        doctor_id: id,
+        available: a,
+        number_of_appointments: numberOfAppoinments,
+      };
     });
     setSelectedDates([...datesRangs]);
   };
 
   const addAvailability = async () => {
+    if (isEmpty(selectedDates)) {
+      dispatch(
+        openAlert({
+          status: ERROR,
+          message: "Please select a date range",
+        })
+      );
+      return;
+    }
+
+    if (numberOfAppoinments <= 0) {
+      dispatch(
+        openAlert({
+          status: ERROR,
+          message: "Please add number of Appointments",
+        })
+      );
+      return;
+    }
+
     await addDoctorAvailability(selectedDates)
       .then((res) => {
-        console.log(res.data);
+        dispatch(
+          openAlert({
+            status: SUCCESS,
+            message: "Availability added successfully",
+          })
+        );
       })
       .catch((error) => {
-        console.log(error, "error");
+        dispatch(
+          openAlert({
+            status: ERROR,
+            message: "Something went wrong",
+          })
+        );
       });
   };
 
@@ -87,7 +126,14 @@ const AddAvailability = () => {
               gap: "10px",
             }}
           >
-            <TextField onChange={onChange} size="small" type={"number"} />
+            <TextField
+              label="Number of appointments"
+              onChange={onChange}
+              size="small"
+              type={"number"}
+              placeholder={"Number of appointments"}
+              value={numberOfAppoinments}
+            />
             <Button variant="contained" onClick={() => addAvailability()}>
               Save
             </Button>

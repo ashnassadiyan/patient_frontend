@@ -27,9 +27,33 @@ export const getPatients = (filterFields) => {
 };
 
 export const deletePatients = (id) => {
+  console.log(id, "id");
   return http.delete(`patient/delete_patient/${id}`);
 };
 
 export const diagnose = (data, id) => {
   return http.post(`patient/diagnose/${id}`, data);
+};
+
+export const diagnoseReport = (id, data) => {
+  return http.post(`patient/diagnoseReport/${id}`, data);
+};
+
+export const getReports = (id) => {
+  return http.get(`patient/getReports/${id}`);
+};
+
+export const updateProfile = (id, data) => {
+  return http.put(`patient/update_profile/${id}`, data);
+};
+
+export const fetchDetails = async () => {
+  const user = JSON.parse(localStorage.getItem("osc-user"));
+  await http
+    .get(`patient/get_user/${user.id}`)
+    .then((response) => {
+      console.log(response.data.data);
+      localStorage.setItem("osc-user", JSON.stringify(response.data.data));
+    })
+    .catch(() => {});
 };

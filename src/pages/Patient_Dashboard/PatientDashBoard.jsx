@@ -6,7 +6,6 @@ import { addToDo } from "../../store/slices/todoSlice";
 const PatientDashBoard = () => {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
-  console.log(state, "state");
   return (
     <Box>
       PatientDashBoard

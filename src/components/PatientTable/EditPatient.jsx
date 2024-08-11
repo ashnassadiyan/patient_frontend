@@ -4,7 +4,7 @@ import React from "react";
 import { deletePatients } from "../../store/patientServices";
 import { useDispatch } from "react-redux";
 import { openAlert } from "../../store/slices/alertSlice";
-import { SUCCESS } from "../CustomAlerts/constants";
+import { ERROR, SUCCESS } from "../CustomAlerts/constants";
 
 const EditPatient = ({ getAllPatients, data }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -17,9 +17,10 @@ const EditPatient = ({ getAllPatients, data }) => {
     setAnchorEl(null);
   };
 
-  const deletePatient = () => {
-    deletePatients(data.id)
+  const deletePatient = async () => {
+    await deletePatients(data.id)
       .then((res) => {
+        handleClose();
         getAllPatients();
         dispatch(
           openAlert({
@@ -29,6 +30,12 @@ const EditPatient = ({ getAllPatients, data }) => {
         );
       })
       .catch((err) => {
+        dispatch(
+          openAlert({
+            status: ERROR,
+            message: "Patient has been deleted",
+          })
+        );
         console.log(err);
       });
   };

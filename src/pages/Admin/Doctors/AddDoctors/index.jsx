@@ -5,6 +5,9 @@ import { Box, Button, Grid, Stack, TextField } from "@mui/material";
 import { createDoctor, getDoctors } from "../../../../store/doctorsServices";
 import { COZY } from "../../../../theme/spacing";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { ERROR, SUCCESS } from "../../../../components/CustomAlerts/constants";
+import { openAlert } from "../../../../store/slices/alertSlice";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -15,6 +18,7 @@ const validationSchema = Yup.object({
 
 const AddDoctors = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -30,10 +34,22 @@ const AddDoctors = () => {
       createDoctor(values)
         .then((response) => {
           resetForm();
-          navigate("/admin/doctors");
+          dispatch(
+            openAlert({
+              status: SUCCESS,
+              message: "Doctor added successfully",
+            })
+          );
+          // navigate("/admin/doctors");
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error?.response?.data?.detail, "message");
+          dispatch(
+            openAlert({
+              status: ERROR,
+              message: error?.response?.data?.detail || "something went wrong",
+            })
+          );
         });
     },
   });

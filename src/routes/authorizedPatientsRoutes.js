@@ -12,6 +12,7 @@ import MyProfile from "../pages/MyProfile/MyProfile";
 import Diagnose from "../pages/Diagnose/Diagnose";
 import Instruction from "../pages/Instruction/Instruction";
 import Symptoms from "../pages/Symptoms/Symptoms";
+import DiagnoseReport from "../pages/DiagnoseReport/DiagnoseReport";
 
 export const authorizedPatientsRoutes = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const authorizedPatientsRoutes = createBrowserRouter([
       {
         path: "/patient/myappoinments",
         element: <MyAppoinments />,
+      },
+      {
+        path: "/patient/diagnoseReport",
+        element: <DiagnoseReport />,
       },
       {
         path: "/patient/diagnosereports",

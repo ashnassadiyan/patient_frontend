@@ -6,10 +6,12 @@ import SearchIcon from "@mui/icons-material/Search";
 import { getPatients } from "../../../store/patientServices";
 import { COZY, UPPER } from "../../../theme/spacing";
 import PatientTable from "../../../components/PatientTable/index";
+import { useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../../store/slices/alertSlice";
 
 const AddDoctors = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [filterFields, setFilterFields] = useState({
     firstName: "",
     lastName: "",
@@ -20,12 +22,16 @@ const AddDoctors = () => {
   const [patients, setDoctors] = useState([]);
 
   const getAllPatients = () => {
+    dispatch(startLoading());
     getPatients(filterFields)
       .then((res) => {
+        dispatch(stopLoading());
         setDoctors(res.data.patients);
         console.log(res.data.patients, "patients");
       })
-      .catch(() => {});
+      .catch(() => {
+        dispatch(stopLoading());
+      });
   };
 
   useEffect(() => {

@@ -229,7 +229,7 @@ const Diagnose = (props) => {
             variant="outlined"
             sx={{ color: "black" }}
             endIcon={<ChevronRightIcon />}
-            disabled={isEmpty(symptoms)}
+            // disabled={isEmpty(symptoms)}
           >
             Next
           </Button>
