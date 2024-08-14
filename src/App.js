@@ -23,9 +23,9 @@ const App = () => {
 
   return (
     <div className="App">
+      <CustomAlert />
       <CustomLoader />
       <RouterProvider router={router} />
-      <CustomAlert />
     </div>
   );
 };

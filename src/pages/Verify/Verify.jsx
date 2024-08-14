@@ -128,11 +128,11 @@ const Verify = () => {
         flexBasis={{ xs: "100%", md: "50%" }}
       >
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          {/* <img
-            src="/images/pages/Frame.png"
+          <img
+            src="/images/verify.jpg"
             alt="Illustration"
             style={{ height: "100%", width: "100%" }}
-          /> */}
+          />
         </Box>
       </Stack>
     </Stack>

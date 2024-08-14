@@ -1,5 +1,5 @@
 import { Snackbar } from "@mui/base";
-import { Alert, Stack } from "@mui/material";
+import { Alert, Backdrop, Stack } from "@mui/material";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeAlert } from "../../store/slices/alertSlice";
@@ -25,17 +25,26 @@ const CustomAlert = () => {
       }}
     >
       <Stack direction={"row"} sx={{ justifyContent: "center" }}>
-        <Snackbar
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 99 }}
           open={alertOpen}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          anchorOrigin={{ vertical: "vertical", horizontal: "horizontal" }}
-          sx={{}}
         >
-          <Alert onClose={handleClose} severity={alertStatus} variant="filled">
-            {messages}
-          </Alert>
-        </Snackbar>
+          <Snackbar
+            open={alertOpen}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "vertical", horizontal: "horizontal" }}
+            sx={{}}
+          >
+            <Alert
+              onClose={handleClose}
+              severity={alertStatus}
+              variant="filled"
+            >
+              {messages}
+            </Alert>
+          </Snackbar>
+        </Backdrop>
       </Stack>
     </Stack>
   );

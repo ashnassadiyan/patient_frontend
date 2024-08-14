@@ -14,6 +14,7 @@ import Instruction from "../pages/Instruction/Instruction";
 import Symptoms from "../pages/Symptoms/Symptoms";
 import DiagnoseReport from "../pages/DiagnoseReport/DiagnoseReport";
 import MakeAppoinment from "../pages/MakeAppointment/MakeAppoinment";
+import AddAppoinment from "../pages/AddAppoinment/AddAppoinment";
 
 export const authorizedPatientsRoutes = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const authorizedPatientsRoutes = createBrowserRouter([
       {
         path: "/patient/makeAppoinment/:id",
         element: <MakeAppoinment />,
+      },
+      {
+        path: "/patient/addappoinment/:doctor/:id",
+        element: <AddAppoinment />,
       },
       {
         path: "/patient/diagnosereports",

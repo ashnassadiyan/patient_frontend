@@ -61,3 +61,7 @@ export const fetchDetails = async () => {
 export const getReport = async (id) => {
   return http.get(`patient/get_diagnosed_report/${id}`);
 };
+
+export const createAppointment = async (data) => {
+  return http.post(`appointments/create_appointment`, data);
+};

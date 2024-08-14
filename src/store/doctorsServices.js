@@ -13,6 +13,10 @@ export const getDoctors = (filterFields) => {
   );
 };
 
+export const getDoctorsAvailability = (id) => {
+  return http.get(`availability/availability/${id}`);
+};
+
 export const createDoctor = (data) => {
   return http.post(`doctor/create_doctor`, data);
 };

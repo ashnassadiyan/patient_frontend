@@ -18,3 +18,9 @@ export const formatDateToYYYYMMDDHHMM = (dateString) => {
   const minutes = String(date.getMinutes()).padStart(2, "0");
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
+
+export const convertISO = (dateStr) => {
+  const date = new Date(dateStr);
+  const formattedDate = date.toString().split(" ").slice(0, 5).join(" ");
+  return formattedDate;
+};
