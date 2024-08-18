@@ -15,6 +15,8 @@ const CustomAlert = () => {
     dispatch(closeAlert());
   };
 
+  if (!alertOpen) return "";
+
   return (
     <Stack
       sx={{

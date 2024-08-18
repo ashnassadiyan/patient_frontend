@@ -65,3 +65,27 @@ export const getReport = async (id) => {
 export const createAppointment = async (data) => {
   return http.post(`appointments/create_appointment`, data);
 };
+
+export const getAppointment = async (id) => {
+  return http.get(`appointments/get_appointments/${id}`);
+};
+
+export const getAllAppointment = async () => {
+  return http.get(`appointments/get_all_appointments`);
+};
+
+export const confirmAppointment = async (data) => {
+  return http.put(`appointments/confirm_appointment`, data);
+};
+
+export const getPatientsCount = async () => {
+  return http.get(`patient/get_patient_count`);
+};
+
+export const getPendingAppoinment = async (id = "") => {
+  return http.get(`appointments/get_pending_appointments?patient_id=${id}`);
+};
+
+export const getDiagnosedReports = async (id = "") => {
+  return http.get(`patient/get_diagnosed_reports?patient_id=${id}`);
+};

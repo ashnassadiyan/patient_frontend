@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 const CustomCheck = ({ label = "", doctor }) => {
@@ -33,16 +33,20 @@ const CustomCheck = ({ label = "", doctor }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Make an appoinment"}
+          {"Confirmation screen"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <Alert severity="info" sx={{ mt: "10px" }}>
             Would you like to make an appoinment with {doctor.firstName}
             {doctor.lastName}
-          </DialogContentText>
+          </Alert>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" onClick={handleClose}>
+          <Button
+            variant="outlined"
+            onClick={handleClose}
+            sx={{ color: "#006CD9" }}
+          >
             cancel
           </Button>
           <Button

@@ -19,8 +19,6 @@ const MakeAppoinment = () => {
   const dispatch = useDispatch();
   const [doctorsList, setDoctorsList] = useState([]);
 
-  console.log(location, "location");
-
   useEffect(() => {
     dispatch(startLoading());
     getDoctors({ specialized: location?.state?.doctor })
@@ -35,20 +33,20 @@ const MakeAppoinment = () => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Make New Appoinment" />
+      <CardHeader title="Make an Appointment" />
       <CardContent>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item md={12}>
-            <Stack direction={"row"} sx={{ justifyContent: "flex-start" }}>
-              <Typography sx={{ fontWeight: 600 }}>
-                {`specialized Doctors for ${location?.state?.doctor}`}
+            <Stack direction={"row"} sx={{ justifyContent: "center" }}>
+              <Typography sx={{ color: "gray" }}>
+                {`Select the doctor you would like to meet for a consultation by clicking the checkbox ${location?.state?.doctor}`}
               </Typography>
             </Stack>
           </Grid>
           <Grid item md={12}>
             <Grid container>
               {doctorsList.map((d, index) => (
-                <Grid item md={3} key={index}>
+                <Grid item md={3} sm={6} xs={6} key={index}>
                   <CustomCheck
                     label={`${d.firstName} ${d.lastName}`}
                     doctor={d}

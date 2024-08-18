@@ -72,10 +72,11 @@ const Login = () => {
         })
         .catch((error) => {
           dispatch(stopLoading());
+          console.log(error.response.data.detail, "error");
           dispatch(
             openAlert({
               status: ERROR,
-              message: "something went wrong",
+              message: error?.response?.data.detail || "something went wrong",
             })
           );
         });

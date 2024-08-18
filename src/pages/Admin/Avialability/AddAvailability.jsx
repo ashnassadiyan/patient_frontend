@@ -8,7 +8,11 @@ import { DateRangePicker } from "react-date-range";
 import { addDoctorAvailability } from "../../../store/doctorsServices";
 import CardHolder from "../../../components/CardHolder/CardHolder";
 import { useDispatch } from "react-redux";
-import { openAlert } from "../../../store/slices/alertSlice";
+import {
+  openAlert,
+  startLoading,
+  stopLoading,
+} from "../../../store/slices/alertSlice";
 import { ERROR, SUCCESS } from "../../../components/CustomAlerts/constants";
 import { isEmpty } from "lodash";
 
@@ -18,7 +22,6 @@ const AddAvailability = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { firstName, lastName, specialized } = location.state;
-  console.log(location.state, "location.state");
 
   const [selectionRange, setSelectionRange] = useState({
     startDate: new Date(),
@@ -44,13 +47,7 @@ const AddAvailability = () => {
       ranges.selection.startDate,
       ranges.selection.endDate
     );
-    datesRangs = datesRangs.map((a) => {
-      return {
-        doctor_id: id,
-        available: a,
-        number_of_appointments: numberOfAppoinments,
-      };
-    });
+
     setSelectedDates([...datesRangs]);
   };
 
@@ -75,16 +72,28 @@ const AddAvailability = () => {
       return;
     }
 
-    await addDoctorAvailability(selectedDates)
+    const datesRangs = selectedDates.map((a) => {
+      return {
+        doctor_id: id,
+        available: a,
+        number_of_appointments: Number(numberOfAppoinments),
+      };
+    });
+
+    dispatch(startLoading());
+    await addDoctorAvailability(datesRangs)
       .then((res) => {
+        dispatch(stopLoading());
         dispatch(
           openAlert({
             status: SUCCESS,
             message: "Availability added successfully",
           })
         );
+        navigate(`/admin/doctors/availability/${id}`);
       })
       .catch((error) => {
+        dispatch(stopLoading());
         dispatch(
           openAlert({
             status: ERROR,
@@ -96,8 +105,10 @@ const AddAvailability = () => {
 
   const onChange = (e) => {
     const { value } = e.target;
+    console.log(value, "value");
     setNumberOfAppoinments(value);
   };
+
   const cardTitle = `${firstName} ${lastName} : ${specialized}`;
 
   return (

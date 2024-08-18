@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
   Card,
@@ -64,7 +66,7 @@ const DiagnoseReport = () => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Diagnosed Report" />
+      <CardHeader title="Diagnostic report" />
       <CardContent>
         <Grid container>
           <Grid item md={6} sm={12} xs={12}></Grid>
@@ -76,9 +78,12 @@ const DiagnoseReport = () => {
                 borderRadius: "21px",
                 width: "100%",
                 p: { md: "24px 24px", sm: "10px" },
-                gap: "10px",
+                gap: "15px",
               }}
             >
+              <Typography sx={{ color: "gray", mt: "20px", mb: "20px" }}>
+                Based on the symptoms you provided, here’s what we discovered:
+              </Typography>
               <Stack sx={{ alignItems: "flex-start" }}>
                 <Typography sx={{ fontWeight: 600 }}>Symptoms</Typography>
                 <Stack direction={"row"}>
@@ -108,6 +113,26 @@ const DiagnoseReport = () => {
                   {formatDateToYYYYMMDDHHMM(diagnosedDetails.created)}
                 </Stack>
               </Stack>
+
+              <Alert severity="info" sx={{ mt: "20px" }}>
+                <Stack sx={{ gap: "10px" }}>
+                  <Typography
+                    sx={{ textAlign: "left", fontSize: "14px", color: "gray" }}
+                  >
+                    VoiceVita is not a substitute for a doctor. We think it’s
+                    important to seek medical advice from a specialist. We’ve
+                    made it easier by providing the best type of specialist who
+                    can help you.
+                  </Typography>
+                  <Typography
+                    sx={{ textAlign: "left", fontSize: "14px", color: "gray" }}
+                  >
+                    Take the next step to feeling better by making an
+                    appointment using our channelling services! Simply click
+                    “Make an appointment”.
+                  </Typography>
+                </Stack>
+              </Alert>
             </Stack>
           </Grid>
         </Grid>

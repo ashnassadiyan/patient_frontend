@@ -44,5 +44,9 @@ export const getAvailabilities = (id) => {
 };
 
 export const verifyOtp = (id, otp) => {
-  return http.post(`http://127.0.0.1:8000/verify/${id}`, { otp: otp });
+  return http.post(`patient/verify/${id}`, { otp: otp });
+};
+
+export const getDoctorsCount = () => {
+  return http.get(`doctor/get_doctors_count`);
 };

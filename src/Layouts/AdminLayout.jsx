@@ -97,7 +97,7 @@ const adminPages = [
   { url: "/admin/doctors", page: "Doctors" },
   { url: "/admin/appoinments", page: "Appoinments" },
   { url: "/admin/patients", page: "Patients" },
-  { url: "/admin/myprofile", page: "My Profile" },
+  // { url: "/admin/myprofile", page: "My Profile" },
 ];
 
 const PatientLayout = () => {
@@ -125,7 +125,7 @@ const PatientLayout = () => {
     if (page === "Doctors") return <CoPresentIcon />;
     if (page === "Appoinments") return <BedroomParentIcon />;
     if (page === "Patients") return <FolderSharedIcon />;
-    if (page === "My Profile") return <AccountBoxIcon />;
+    // if (page === "My Profile") return <AccountBoxIcon />;
   };
 
   const logout = () => {
@@ -153,7 +153,12 @@ const PatientLayout = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ width: "100%", textAlign: "start" }}
+          >
             Admin Dashboard
           </Typography>
           <Stack

@@ -5,10 +5,11 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Stack,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getDoctorsAvailability } from "../../store/doctorsServices";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -27,8 +28,10 @@ import {
 import { useDispatch } from "react-redux";
 import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
 import { isEmpty } from "lodash";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 const AddAppoinment = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const localizer = momentLocalizer(moment);
   const { id, doctor } = useParams();
@@ -89,11 +92,14 @@ const AddAppoinment = () => {
   const makeAnAppointment = async () => {
     dispatch(startLoading());
     console.log(selected, "selected");
+    const user = JSON.parse(localStorage.getItem("osc-user"));
     const data = {
       diagnose_id: id,
       doctor_id: doctor,
       available_id: selected.id,
+      patient_id: user.id,
     };
+
     await createAppointment(data)
       .then((res) => {
         dispatch(stopLoading());
@@ -103,14 +109,16 @@ const AddAppoinment = () => {
             message: "Appointments has been created",
           })
         );
-        console.log(res);
+
+        navigate("/patient/dashboard");
       })
-      .catch(() => {
+      .catch((error) => {
         dispatch(stopLoading());
+        console.log(error, "error");
         dispatch(
           openAlert({
             status: ERROR,
-            message: "Could not save",
+            message: error || "Could not save",
           })
         );
       });
@@ -120,6 +128,12 @@ const AddAppoinment = () => {
     <Card variant="outlined">
       <CardHeader title="Make New Appoinment" />
       <CardContent>
+        <Stack sx={{ mt: "20px", mb: "20px" }}>
+          <Alert severity="info">
+            Here is the availability of your chosen health specialist. Choose a
+            date that works best for you.
+          </Alert>
+        </Stack>
         {isEmpty(data) ? (
           <Typography>No data found</Typography>
         ) : (
@@ -197,7 +211,21 @@ const AddAppoinment = () => {
           </DialogActions>
         </Dialog>
       </CardContent>
-      <CardActions></CardActions>
+      <CardActions>
+        <Stack
+          direction={"row"}
+          sx={{ width: "100%", justifyContent: "flex-start" }}
+        >
+          <Button
+            onClick={() => navigate(-1)}
+            startIcon={<ChevronLeftIcon />}
+            variant="outlined"
+            sx={{ color: "black" }}
+          >
+            Back to Doctors
+          </Button>
+        </Stack>
+      </CardActions>
     </Card>
   );
 };

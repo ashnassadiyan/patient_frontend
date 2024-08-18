@@ -20,7 +20,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import BedroomParentIcon from "@mui/icons-material/BedroomParent";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography, useMediaQuery } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import { verifyToken } from "../store/patientServices";
@@ -165,123 +165,131 @@ const PatientLayout = () => {
       });
   }, []);
 
+  const mobile = useMediaQuery("(max-width:900)");
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        open={open}
-        enableColorOnDark
-        className={`${classes.navbar}`}
-        sx={{ display: { md: "block", sm: "none", xs: "none" } }}
-      >
-        <Toolbar>
-          <IconButton
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-              color: "black",
-              display: { md: "block", sm: "none", xs: "none" },
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ width: "100%", textAlign: "start" }}
-          >
-            Patient Dashboard
-          </Typography>
-          <Stack
-            direction={"row"}
-            sx={{
-              alignItems: "center",
-              justifyContent: "flex-end",
-              width: "100%",
-              gap: "20px",
-              display: { sm: "none", xs: "none", md: "flex" },
-            }}
-          >
-            <Button
-              onClick={() => goToDiagnose()}
-              variant="outlined"
-              sx={{ color: "black", bgcolor: "white" }}
-              startIcon={<LocalHospitalIcon />}
+      {!mobile && (
+        <AppBar
+          position="fixed"
+          open={open}
+          enableColorOnDark
+          className={`${classes.navbar}`}
+          sx={{ display: { md: "block", sm: "none", xs: "none" } }}
+        >
+          <Toolbar>
+            <IconButton
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+                color: "black",
+                display: { md: "block", sm: "none", xs: "none" },
+              }}
             >
-              Diagnose
-            </Button>
-            <Button
-              onClick={() => logout()}
-              variant="outlined"
-              sx={{ color: "black", bgcolor: "white" }}
-              startIcon={<LogoutIcon />}
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ width: "100%", textAlign: "start" }}
             >
-              Logout
-            </Button>
-          </Stack>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        open={open}
-        sx={{ display: { md: "block", sm: "none", xs: "none" } }}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {patientPages.map((page, index) => (
-            <ListItem key={index} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                onClick={() => navigate(`${page.url}`)}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
+              Patient Dashboard
+            </Typography>
+            <Stack
+              direction={"row"}
+              sx={{
+                alignItems: "center",
+                justifyContent: "flex-end",
+                width: "100%",
+                gap: "20px",
+                display: { sm: "none", xs: "none", md: "flex" },
+              }}
+            >
+              <Button
+                onClick={() => goToDiagnose()}
+                variant="outlined"
+                sx={{ color: "black", bgcolor: "white" }}
+                startIcon={<LocalHospitalIcon />}
               >
-                <ListItemIcon
+                Diagnose
+              </Button>
+              <Button
+                onClick={() => logout()}
+                variant="outlined"
+                sx={{ color: "black", bgcolor: "white" }}
+                startIcon={<LogoutIcon />}
+              >
+                Logout
+              </Button>
+            </Stack>
+          </Toolbar>
+        </AppBar>
+      )}
+      {!mobile && (
+        <Drawer
+          variant="permanent"
+          open={open}
+          sx={{ display: { md: "block", sm: "none", xs: "none" } }}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            {patientPages.map((page, index) => (
+              <ListItem key={index} disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  onClick={() => navigate(`${page.url}`)}
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
                   }}
                 >
-                  {getIcons(page.page, page.url)}
-                </ListItemIcon>
-                <ListItemText
-                  primary={page.page}
-                  sx={{
-                    opacity: open ? 1 : 0,
-                    color: page.url === path ? "#03a9f4" : "black",
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-      </Drawer>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {getIcons(page.page, page.url)}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={page.page}
+                    sx={{
+                      opacity: open ? 1 : 0,
+                      color: page.url === path ? "#03a9f4" : "black",
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </Drawer>
+      )}
+
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: "30px 15px",
-          height: "100vh",
+          p: { md: "30px 15px", sm: "45px 15px", xs: "50px 15px" },
+          height: { md: "100vh", sm: "120vh" },
           overflow: "auto",
           paddingTop: { md: "80px", sm: "5px", xs: "5px" },
+
           bgcolor: "#f6f3f3",
         }}
       >

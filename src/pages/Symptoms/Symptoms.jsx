@@ -31,6 +31,7 @@ import {
   stopLoading,
 } from "../../store/slices/alertSlice";
 import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
+import AddIcon from "@mui/icons-material/Add";
 
 function getSymptomsString(arr) {
   return arr.map((item) => item.symptom).join(", ");
@@ -117,7 +118,7 @@ const Symptoms = () => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Symptoms" />
+      <CardHeader title="Add Symptoms Manually" />
       <CardContent>
         <Grid container>
           <Grid item md={6} sm={12}>
@@ -136,20 +137,13 @@ const Symptoms = () => {
                 p: { md: "24px 24px", sm: "10px" },
               }}
             >
-              <Typography
-                sx={{ fontSize: "14px", fontWeight: 600, mb: "32px" }}
-              >
-                Here are the symptoms you have recorded
-              </Typography>
-              <Typography sx={{ fontSize: "12px", fontWeight: 400 }}>
-                symptom
-              </Typography>
               <FormControl
                 sx={{ m: 1, width: "100%", mt: "12px" }}
                 variant="outlined"
+                size="small"
               >
                 <InputLabel htmlFor="outlined-adornment-password">
-                  Add symptom
+                  Add Symptom
                 </InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-password"
@@ -165,7 +159,7 @@ const Symptoms = () => {
                         }}
                         sx={{ color: "#006CD9" }}
                       >
-                        +
+                        <AddIcon />
                       </IconButton>
                     </InputAdornment>
                   }
@@ -227,6 +221,11 @@ const Symptoms = () => {
                     />
                   ))}
               </Box>
+              <Typography sx={{ fontSize: "14px", mb: "32px" }}>
+                Missed out on any symptoms? Not to worry – we got you covered.
+                You can still add them manually, by typing the symptom in the
+                “Search box”.
+              </Typography>
             </Box>
           </Grid>
         </Grid>

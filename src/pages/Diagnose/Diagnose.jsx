@@ -12,6 +12,7 @@ import {
   IconButton,
   Stack,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
@@ -116,7 +117,7 @@ const Diagnose = (props) => {
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Diagnose" />
+      <CardHeader title="Describe your symptoms" />
       <CardContent>
         <Grid container>
           <Grid item md={6} sm={12} xs={12}>
@@ -133,8 +134,89 @@ const Diagnose = (props) => {
                 width: "100%",
                 height: "100%",
                 justifyContent: "center",
+                gap: "10px",
               }}
             >
+              <Typography sx={{ fontSize: "20px", mt: "20px" }}>
+                Ready to take the next step to feeling better?
+              </Typography>
+
+              <Stack sx={{ padding: "5px", mt: "20px" }}>
+                <Typography
+                  sx={{ textAlign: "left", color: "gray", color: "15px" }}
+                >
+                  Instructions:
+                </Typography>
+                <Stack sx={{ padding: "10px" }}>
+                  <ol style={{ gap: "10px" }}>
+                    <li
+                      style={{
+                        padding: "10px",
+                        color: "gray",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          textAlign: "left",
+                          color: "gray",
+                          fontSize: "14px",
+                        }}
+                      >
+                        When you’re ready, click the mic button to start
+                        recording your symptoms. Remember to speak clearly and
+                        describe your symptoms as best as you can. Take your
+                        time – there’s no rush.
+                      </Typography>
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px",
+                        color: "gray",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          textAlign: "left",
+                          color: "gray",
+                          fontSize: "14px",
+                        }}
+                      >
+                        When you’re done, click the “Stop” button to end the
+                        recording.
+                      </Typography>
+                    </li>
+                    <li
+                      style={{
+                        padding: "10px",
+                        color: "gray",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          textAlign: "left",
+                          color: "gray",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Before you upload your recording, you have the chance to
+                        play back and listen to it – simply click the “Playback”
+                        button. If you’re satisfied with the audio clip, you can
+                        click “Upload”. If not, you can record your symptoms
+                        again by following the same process.
+                      </Typography>
+                    </li>
+                  </ol>
+                </Stack>
+              </Stack>
+
+              <Typography sx={{ fontSize: "15px" }}>
+                <b> *Remember</b> – you have to click “Upload” when you are
+                ready to submit the recording.
+              </Typography>
+
               <h4
                 style={{
                   marginLeft: "10px",

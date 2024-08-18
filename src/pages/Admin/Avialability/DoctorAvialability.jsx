@@ -7,6 +7,8 @@ import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import CardHolder from "../../../components/CardHolder/CardHolder";
+import { useDispatch } from "react-redux";
+import { startLoading, stopLoading } from "../../../store/slices/alertSlice";
 
 const localizer = momentLocalizer(moment);
 
@@ -14,21 +16,20 @@ const DoctorAvialability = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const { firstName, lastName, specialized } = location.state;
   const [data, setData] = useState([]);
 
-  console.log(data, "location.state");
-
   const transformEventData = (data) => {
     return data.map((event) => {
-      const { available, doctor_id, id } = event;
+      const { available, doctor_id, id, number_of_appointments } = event;
       const startDateTime = new Date(`${available}`);
       const endDateTime = new Date(`${available}`);
       endDateTime.setHours(endDateTime.getHours() + 1);
 
       return {
         id,
-        title: doctor_id,
+        title: `available ${number_of_appointments || doctor_id}`,
         start: startDateTime,
         end: endDateTime,
       };
@@ -36,11 +37,15 @@ const DoctorAvialability = () => {
   };
 
   useEffect(() => {
+    dispatch(startLoading());
     getDoctorAvailability(id)
       .then((res) => {
+        dispatch(stopLoading());
         setData(transformEventData(res.data.availabilities));
       })
-      .catch(() => {});
+      .catch(() => {
+        dispatch(stopLoading());
+      });
   }, [id]);
 
   const title = `${firstName} ${lastName} : ${specialized}`;
