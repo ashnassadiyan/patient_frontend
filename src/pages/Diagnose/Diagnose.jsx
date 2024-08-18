@@ -73,17 +73,17 @@ const Diagnose = (props) => {
       dispatch(stopLoading());
       dispatch(openAlert({ status: SUCCESS, message: "Successfully updated" }));
       const getSymptomsOnly = JSON.parse(result.data.transcribed).filter(
-        (s) => s.entity_group === "SIGN_SYMPTOM"
+        (s) => s.entity_group === "SIGN_SYMPTOM" || s.entity_group === "HISTORY"
       );
       setSymptoms([...getSymptomsOnly]);
-      console.log(getSymptomsOnly, "getSymptomsOnly");
-      gotoNext();
+      if (getSymptomsOnly.length > 0) gotoNext();
     } catch (error) {
       dispatch(stopLoading());
       dispatch(openAlert({ status: ERROR, message: "Something went wrong" }));
-      console.error("Error uploading file", error);
     }
   };
+
+  console.log(symptoms, "symptoms");
 
   const handleStopRecording = () => {
     stopRecording();
@@ -311,7 +311,7 @@ const Diagnose = (props) => {
             variant="outlined"
             sx={{ color: "black" }}
             endIcon={<ChevronRightIcon />}
-            // disabled={isEmpty(symptoms)}
+            disabled={isEmpty(symptoms)}
           >
             Next
           </Button>

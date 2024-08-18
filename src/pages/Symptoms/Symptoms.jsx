@@ -23,7 +23,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { isEmpty } from "lodash";
-import { diagnoseReport } from "../../store/patientServices";
+import { diagnoseReport, diagnoseSymptoms } from "../../store/patientServices";
 import { useDispatch } from "react-redux";
 import {
   openAlert,
@@ -32,6 +32,7 @@ import {
 } from "../../store/slices/alertSlice";
 import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
 import AddIcon from "@mui/icons-material/Add";
+import { extractOutputs } from "../../helpers/helper";
 
 function getSymptomsString(arr) {
   return arr.map((item) => item.symptom).join(", ");
@@ -44,6 +45,7 @@ const Symptoms = () => {
   const [symptomsSets, setSymptomsSets] = useState([]);
   const [symptom, setSymptom] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [extracted, setExtracted] = useState("");
 
   console.log(location.state, "location.state");
 
@@ -83,33 +85,41 @@ const Symptoms = () => {
   const diagnose = () => {
     const user = JSON.parse(localStorage.getItem("osc-user"));
 
-    const data = {
-      doctor: "rheumatologist",
-      disease: "arthritis",
-      symptoms: getSymptomsString(symptomsSets),
-    };
     dispatch(startLoading());
-    diagnoseReport(user?.id, data)
+    const symptoms = getSymptomsString(symptomsSets);
+    diagnoseSymptoms(symptoms)
       .then((res) => {
-        dispatch(stopLoading());
-        dispatch(
-          openAlert({
-            message: "Updated successfully",
-            status: SUCCESS,
+        const finalized = extractOutputs(res.data.results);
+        const data = {
+          doctor: finalized?.doctor,
+          disease: finalized?.disease,
+          symptoms: getSymptomsString(symptomsSets),
+        };
+
+        diagnoseReport(user?.id, data)
+          .then((res) => {
+            dispatch(stopLoading());
+            dispatch(
+              openAlert({
+                message: "Updated successfully",
+                status: SUCCESS,
+              })
+            );
+            nativigate(
+              `/patient/diagnoseReport/${res.data.saved_diagnosed_id}`
+            );
           })
-        );
-        nativigate(`/patient/diagnoseReport/${res.data.saved_diagnosed_id}`);
+          .catch(() => {
+            dispatch(stopLoading());
+            dispatch(
+              openAlert({
+                message: "something went wrong",
+                status: ERROR,
+              })
+            );
+          });
       })
-      .catch(() => {
-        dispatch(stopLoading());
-        dispatch(
-          openAlert({
-            message: "something went wrong",
-            status: ERROR,
-          })
-        );
-      });
-    //
+      .catch(() => {});
   };
 
   const gotoDiagnose = () => {

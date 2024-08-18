@@ -24,3 +24,16 @@ export const convertISO = (dateStr) => {
   const formattedDate = date.toString().split(" ").slice(0, 5).join(" ");
   return formattedDate;
 };
+
+export const extractOutputs = (str) => {
+  console.log(str, "str");
+  if (!str) return "";
+  const regex = /### outputs:\s*({[^}]+})/;
+  const match = str.match(regex);
+
+  if (match) {
+    return JSON.parse(match[1].replace(/'/g, '"'));
+  }
+
+  return null;
+};

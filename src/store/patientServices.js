@@ -31,8 +31,8 @@ export const deletePatients = (id) => {
   return http.delete(`patient/delete_patient/${id}`);
 };
 
-export const diagnose = (data, id) => {
-  return http.post(`patient/diagnose/${id}`, data);
+export const diagnoseSymptoms = (data) => {
+  return http.post(`patient/diagnose_symptoms`, { symptoms: data });
 };
 
 export const diagnoseReport = (id, data) => {

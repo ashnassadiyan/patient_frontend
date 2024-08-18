@@ -9,7 +9,7 @@ export const getDoctors = (filterFields) => {
     page = 1,
   } = filterFields;
   return http.get(
-    `doctor/get_doctors?firstName=${firstName}&lastName=${lastName}&specialized=${specialized}&page=${page}`
+    `doctor/get_doctors?firstName=${firstName}&lastName=${lastName}&specialized=${specialized}&page=${page}&limit=20`
   );
 };
 
