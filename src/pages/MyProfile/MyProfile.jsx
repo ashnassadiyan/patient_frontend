@@ -11,6 +11,7 @@ import {
   Select,
   styled,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -98,8 +99,10 @@ const MyProfile = () => {
   };
 
   return (
-    <Card variant="outlined">
-      <CardHeader title="My Profile" />
+    <Card sx={{ borderRadius: "12px", boxShadow: "none" }}>
+      <Typography sx={{ m: "10px 0", fontSize: "24px", fontWeight: 600 }}>
+        My Profile
+      </Typography>
       <CardContent>
         <Grid container>
           <Grid item md={6}>

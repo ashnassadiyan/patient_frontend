@@ -2,7 +2,6 @@ import React from "react";
 import { formatDateToYYYYMMDDHHMM } from "../../helpers/helper";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
-
 import {
   IconButton,
   Stack,
@@ -13,6 +12,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import ActivateAppoinment from "./ActivateAppoinment";
 
@@ -25,31 +25,78 @@ const AppointmentTable = ({ data, getappointments }) => {
         <caption>Appoinments</caption>
         <TableHead>
           <TableRow>
-            <TableCell>Disease</TableCell>
-            <TableCell align="right">Doctor</TableCell>
-            <TableCell align="right">Appointment Date </TableCell>
-            <TableCell align="right">Number</TableCell>
-            <TableCell align="right">Status</TableCell>
-            {isAdmin && <TableCell align="right">Activate</TableCell>}
+            <TableCell>
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Disease
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Doctor
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Appointment Date
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Number
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Status
+              </Typography>
+            </TableCell>
+            {isAdmin && (
+              <TableCell align="right">
+                <Typography
+                  sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+                >
+                  Activate
+                </Typography>
+              </TableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row">
-                {row.diagnose_data.disease}
+                <Typography> {row.diagnose_data.disease}</Typography>
               </TableCell>
               <TableCell align="right">
-                {row.doctor_data.firstName} {row.doctor_data.lastName}
+                <Typography>
+                  {" "}
+                  {row.doctor_data.firstName} {row.doctor_data.lastName}
+                </Typography>
               </TableCell>
               <TableCell align="right">
-                {formatDateToYYYYMMDDHHMM(row.available_data.available)}
+                <Typography>
+                  {formatDateToYYYYMMDDHHMM(row.available_data.available)}
+                </Typography>
               </TableCell>
               <TableCell align="right">
-                {row.status === false ? "Pending" : row?.number}
+                <Typography>
+                  {row.status === false ? "Pending" : row?.number}
+                </Typography>
               </TableCell>
               <TableCell align="right">
-                {row.status === true ? "Confirmed" : "Pending"}
+                <Typography>
+                  {row.status === true ? "Confirmed" : "Pending"}
+                </Typography>
               </TableCell>
               {isAdmin && (
                 <ActivateAppoinment

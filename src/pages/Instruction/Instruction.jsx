@@ -20,7 +20,7 @@ const Instruction = () => {
 
   return (
     <div>
-      <Card variant="outlined">
+      <Card sx={{ borderRadius: "12px", boxShadow: "none" }}>
         <CardContent>
           <Stack sx={{ gap: "20px" }}>
             <Typography sx={{ m: "10px 0", fontSize: "24px", fontWeight: 600 }}>

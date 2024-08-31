@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import AppointmentTable from "../../components/AppointmentTable/AppointmentTable";
@@ -23,8 +23,11 @@ const MyAppoinments = () => {
   }, []);
   return (
     <div>
-      <Card variant="outlined">
-        <CardHeader title="My Appointments" />
+      <Card sx={{ borderRadius: "12px", boxShadow: "none" }}>
+        <Typography sx={{ m: "10px 0", fontSize: "24px", fontWeight: 600 }}>
+          My Appointments
+        </Typography>
+
         <CardContent>
           <AppointmentTable data={data} />
         </CardContent>

@@ -17,9 +17,19 @@ code {
   width: 435px;
 }
 
+.landingImages {
+  height: 550px;
+  width: 535px;
+}
+
 @media (max-width: 600px) {
   .instrunction {
     height: 300px;
     width: 300px;
+  }
+
+  .landingImages {
+    height: 350px;
+    width: 350px;
   }
 }

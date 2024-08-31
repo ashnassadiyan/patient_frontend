@@ -32,7 +32,7 @@ const DiagnoseReports = () => {
   }, []);
 
   return (
-    <Card variant="outlined">
+    <Card sx={{ borderRadius: "12px", boxShadow: "none" }}>
       <CardHeader title="Diagnosed Reports" />
       <CardContent>
         <Grid container>

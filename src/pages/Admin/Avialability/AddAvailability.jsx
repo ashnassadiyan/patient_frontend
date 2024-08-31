@@ -90,7 +90,9 @@ const AddAvailability = () => {
             message: "Availability added successfully",
           })
         );
-        navigate(`/admin/doctors/availability/${id}`);
+        navigate(`/admin/doctors/availability/${id}`, {
+          state: { ...location.state },
+        });
       })
       .catch((error) => {
         dispatch(stopLoading());

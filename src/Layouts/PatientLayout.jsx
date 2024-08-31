@@ -32,12 +32,12 @@ const useStyles = makeStyles((theme) => ({
   navbar: {
     backgroundColor: "#ffff !important",
     transition: "background-color 0.3s ease",
-    boxShadow: "none",
+    // : "none",
     // borderBottom: "1px solid rgba(0, 0, 0, 0.20)",
   },
   navbarScrolled: {
     backgroundColor: "#ffff", // White background when scrolled
-    boxShadow: "none", // Add a subtle shadow
+    // borderBottom: "1px solid rgba(0, 0, 0, 0.20)",
   },
 }));
 
@@ -72,14 +72,17 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+})(({ theme, open, scrolled }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  // borderBottom: !scrolled ? "1px solid rgba(0, 0, 0, 0.20)" : "none",
+  boxShadow: scrolled ? "1px solid rgba(0, 0, 0, 0.20)" : "none",
   ...(open && {
     marginLeft: drawerWidth,
+    // borderBottom: "1px solid rgba(0, 0, 0, 0.20)",
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
@@ -131,20 +134,18 @@ const PatientLayout = () => {
   const getIcons = (page, url) => {
     console.log(url, "url");
     if (page === "Dashboard")
-      return <HomeIcon sx={{ color: url === path ? "#03a9f4 " : "black" }} />;
+      return <HomeIcon sx={{ color: url === path ? "orange " : "black" }} />;
     if (page === "Diagnosed Reports")
       return (
-        <CoPresentIcon sx={{ color: url === path ? "#03a9f4 " : "black" }} />
+        <CoPresentIcon sx={{ color: url === path ? "orange " : "black" }} />
       );
     if (page === "My Appointments")
       return (
-        <BedroomParentIcon
-          sx={{ color: url === path ? "#03a9f4 " : "black" }}
-        />
+        <BedroomParentIcon sx={{ color: url === path ? "orange " : "black" }} />
       );
     if (page === "My Profile")
       return (
-        <AccountBoxIcon sx={{ color: url === path ? "#03a9f4 " : "black" }} />
+        <AccountBoxIcon sx={{ color: url === path ? "orange " : "black" }} />
       );
   };
   const logout = () => {
@@ -170,6 +171,7 @@ const PatientLayout = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
+
       {!mobile && (
         <AppBar
           position="fixed"
@@ -230,6 +232,7 @@ const PatientLayout = () => {
           </Toolbar>
         </AppBar>
       )}
+
       {!mobile && (
         <Drawer
           variant="permanent"
@@ -245,7 +248,7 @@ const PatientLayout = () => {
               )}
             </IconButton>
           </DrawerHeader>
-          <Divider />
+
           <List>
             {patientPages.map((page, index) => (
               <ListItem key={index} disablePadding sx={{ display: "block" }}>
@@ -270,14 +273,13 @@ const PatientLayout = () => {
                     primary={page.page}
                     sx={{
                       opacity: open ? 1 : 0,
-                      color: page.url === path ? "#03a9f4" : "black",
+                      color: page.url === path ? "orange" : "black",
                     }}
                   />
                 </ListItemButton>
               </ListItem>
             ))}
           </List>
-          <Divider />
         </Drawer>
       )}
 

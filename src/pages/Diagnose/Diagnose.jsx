@@ -73,10 +73,14 @@ const Diagnose = (props) => {
       dispatch(stopLoading());
       dispatch(openAlert({ status: SUCCESS, message: "Successfully updated" }));
       const getSymptomsOnly = JSON.parse(result.data.transcribed).filter(
-        (s) => s.entity_group === "SIGN_SYMPTOM" || s.entity_group === "HISTORY"
+        (s) =>
+          s.entity_group === "SIGN_SYMPTOM" ||
+          s.entity_group === "HISTORY" ||
+          s.entity_group === "DETAILED_DESCRIPTION"
       );
+      console.log(getSymptomsOnly, "getSymptomsOnly");
       setSymptoms([...getSymptomsOnly]);
-      if (getSymptomsOnly.length > 0) gotoNext();
+      if (getSymptomsOnly.length > 0) gotoNext(getSymptomsOnly);
     } catch (error) {
       dispatch(stopLoading());
       dispatch(openAlert({ status: ERROR, message: "Something went wrong" }));
@@ -104,8 +108,8 @@ const Diagnose = (props) => {
     setIsActive(false);
   };
 
-  const gotoNext = () => {
-    nativigate("/patient/symptoms", { state: symptoms });
+  const gotoNext = (newSymptoms) => {
+    nativigate("/patient/symptoms", { state: newSymptoms });
   };
 
   const gotoInstruction = () => {
@@ -116,9 +120,11 @@ const Diagnose = (props) => {
     status === "idle" ? "Click the mic icon to start the recording" : status;
 
   return (
-    <Card variant="outlined">
-      <CardHeader title="Describe your symptoms" />
+    <Card sx={{ borderRadius: "12px", boxShadow: "none" }}>
       <CardContent>
+        <Typography sx={{ m: "10px 0", fontSize: "24px", fontWeight: 600 }}>
+          Describe your symptoms
+        </Typography>
         <Grid container>
           <Grid item md={6} sm={12} xs={12}>
             <img

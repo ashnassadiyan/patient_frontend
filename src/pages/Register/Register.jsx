@@ -18,11 +18,15 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerService } from "../../store/patientServices";
 import { useDispatch } from "react-redux";
 import { ERROR, SUCCESS } from "../../components/CustomAlerts/constants";
-import { openAlert } from "../../store/slices/alertSlice";
+import {
+  openAlert,
+  startLoading,
+  stopLoading,
+} from "../../store/slices/alertSlice";
 
 const Illustration = styled("div")({
   textAlign: "center",
@@ -71,6 +75,7 @@ const Register = () => {
     userType: "patient",
   };
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (values, { setSubmitting }) => {
     registerPatient(values);
@@ -78,6 +83,7 @@ const Register = () => {
   };
 
   const registerPatient = async (values) => {
+    dispatch(startLoading());
     await registerService(values)
       .then((response) => {
         dispatch(
@@ -86,11 +92,13 @@ const Register = () => {
             message: "Registered successfully",
           })
         );
+        dispatch(stopLoading());
         localStorage.setItem("osc-user", JSON.stringify(response.data.patient));
         localStorage.setItem("osc-token", JSON.stringify(response.data.token));
         window.location.href = "/verify";
       })
       .catch((error) => {
+        dispatch(stopLoading());
         dispatch(
           openAlert({
             status: ERROR,
@@ -118,14 +126,14 @@ const Register = () => {
           lg={6}
           sx={{
             borderRadius: "24px",
-            backgroundColor: "#EBFAFE",
+            // backgroundColor: "#EBFAFE",
             height: { lg: "fit-content" },
             display: { xs: "none", sm: "none", md: "block" },
           }}
         >
           <Illustration>
             <img
-              src="https://cdn.vectorstock.com/i/2000v/52/06/digital-health-flat-vector-4275206.avif"
+              src="/images/register.png"
               alt="Illustration"
               style={{ height: "414px", width: "396px" }}
             />
@@ -339,21 +347,39 @@ const Register = () => {
                           />
                         </Grid>
                         <Grid item xs={12}>
-                          <FormControlLabel
-                            control={<Field as={Checkbox} name="newsLetters" />}
-                            label={
-                              <span
-                                style={{
-                                  lineHeight: "20px",
-                                  display: "inline-block",
-                                  color: "#7D7D7D",
-                                  fontSize: "12px",
-                                }}
-                              >
-                                I agree with terms and conditions
-                              </span>
-                            }
-                          />
+                          <Stack sx={{ gap: "10px", alignItems: "center" }}>
+                            <Typography
+                              sx={{
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                                fontSize: "12px",
+                                color: "#7D7D7D",
+                                "&:hover": {
+                                  color: "orange", // Change this to your desired hover color
+                                },
+                              }}
+                              onClick={() => navigate("/privacypolicy")}
+                            >
+                              Read Privacy Policy
+                            </Typography>
+                            <FormControlLabel
+                              control={
+                                <Field as={Checkbox} name="newsLetters" />
+                              }
+                              label={
+                                <span
+                                  style={{
+                                    lineHeight: "20px",
+                                    display: "inline-block",
+                                    color: "#7D7D7D",
+                                    fontSize: "12px",
+                                  }}
+                                >
+                                  I agree with terms and conditions
+                                </span>
+                              }
+                            />
+                          </Stack>
                         </Grid>
                         <Grid
                           item

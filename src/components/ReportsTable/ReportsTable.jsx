@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { formatDateToYYYYMMDDHHMM } from "../../helpers/helper";
@@ -21,26 +22,68 @@ const ReportsTable = ({ data = [] }) => {
         <caption>Diagnosed Reports</caption>
         <TableHead>
           <TableRow>
-            <TableCell>Id</TableCell>
-            <TableCell align="right">Disease</TableCell>
-            <TableCell align="right">Doctor</TableCell>
-            <TableCell align="right">Date </TableCell>
-            <TableCell align="right">symptoms</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell>
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                ID
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Disease
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Doctor
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Date{" "}
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                symptoms
+              </Typography>
+            </TableCell>
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Action
+              </Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
               <TableCell component="th" scope="row">
-                {row.id}
+                <Typography> {row.id}</Typography>
               </TableCell>
-              <TableCell align="right">{row.disease}</TableCell>
-              <TableCell align="right">{row.doctor}</TableCell>
               <TableCell align="right">
-                {formatDateToYYYYMMDDHHMM(row.created)}
+                <Typography> {row.disease}</Typography>
               </TableCell>
-              <TableCell align="right">{row.symptoms}</TableCell>
+              <TableCell align="right">
+                <Typography>{row.doctor}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography>{formatDateToYYYYMMDDHHMM(row.created)}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography>{row.symptoms}</Typography>
+              </TableCell>
               <TableCell align="right">
                 <Stack
                   direction={"row"}

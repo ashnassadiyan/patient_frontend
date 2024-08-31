@@ -57,7 +57,7 @@ const DoctorAvialability = () => {
           <Button
             onClick={() =>
               navigate(`/admin/doctors/availability/add/${id}`, {
-                state: location.state,
+                state: { ...location.state },
               })
             }
             variant="contained"
