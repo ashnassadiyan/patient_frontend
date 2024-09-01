@@ -109,7 +109,7 @@ const MyProfile = () => {
             <img
               alt="google_logo"
               className="instrunction"
-              src="/images/profile.jpg"
+              src="/images/profile.png"
             />
           </Grid>
           <Grid item md={6}>

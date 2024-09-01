@@ -14,6 +14,7 @@ import React from "react";
 import { formatDateToYYYYMMDDHHMM } from "../../helpers/helper";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ReportsTable = ({ data = [] }) => {
   return (
@@ -89,15 +90,15 @@ const ReportsTable = ({ data = [] }) => {
                   direction={"row"}
                   sx={{ gap: "10px", justifyContent: "flex-end" }}
                 >
-                  <Tooltip title="View Report" arrow>
+                  <Tooltip title="Delete Report" arrow>
                     <IconButton>
-                      <VisibilityIcon />
+                      <DeleteIcon color="warning" />
                     </IconButton>
                   </Tooltip>
 
                   <Tooltip title="View Appoinment" arrow>
                     <IconButton>
-                      <CollectionsBookmarkIcon />
+                      <CollectionsBookmarkIcon color="primary" />
                     </IconButton>
                   </Tooltip>
                 </Stack>

@@ -348,20 +348,36 @@ const Register = () => {
                         </Grid>
                         <Grid item xs={12}>
                           <Stack sx={{ gap: "10px", alignItems: "center" }}>
-                            <Typography
-                              sx={{
-                                textDecoration: "underline",
-                                cursor: "pointer",
-                                fontSize: "12px",
-                                color: "#7D7D7D",
-                                "&:hover": {
-                                  color: "orange", // Change this to your desired hover color
-                                },
-                              }}
-                              onClick={() => navigate("/privacypolicy")}
-                            >
-                              Read Privacy Policy
-                            </Typography>
+                            <Stack direction={"row"} sx={{ gap: "10px" }}>
+                              <Typography
+                                sx={{
+                                  textDecoration: "underline",
+                                  cursor: "pointer",
+                                  fontSize: "12px",
+                                  color: "#7D7D7D",
+                                  "&:hover": {
+                                    color: "orange",
+                                  },
+                                }}
+                                onClick={() => navigate("/termsconditions")}
+                              >
+                                Terms of Use
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  textDecoration: "underline",
+                                  cursor: "pointer",
+                                  fontSize: "12px",
+                                  color: "#7D7D7D",
+                                  "&:hover": {
+                                    color: "orange",
+                                  },
+                                }}
+                                onClick={() => navigate("/privacypolicy")}
+                              >
+                                Privacy Policy
+                              </Typography>
+                            </Stack>
                             <FormControlLabel
                               control={
                                 <Field as={Checkbox} name="newsLetters" />

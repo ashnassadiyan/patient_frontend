@@ -1,4 +1,4 @@
-import { IconButton, TableCell } from "@mui/material";
+import { IconButton, TableCell, Typography } from "@mui/material";
 import React from "react";
 import PendingIcon from "@mui/icons-material/Pending";
 import { confirmAppointment } from "../../store/patientServices";
@@ -9,14 +9,14 @@ import {
   stopLoading,
 } from "../../store/slices/alertSlice";
 import { ERROR, SUCCESS } from "../CustomAlerts/constants";
+import CloseIcon from "@mui/icons-material/Close";
 
-const ActivateAppoinment = ({ data, getappointments }) => {
+const ActivateAppoinment = ({ data, getappointments, isAdmin }) => {
   const { status, patient_id, available_id, diagnose_id, doctor_id, _id } =
     data;
   const dispatch = useDispatch();
 
   const applyConfirm = async () => {
-    dispatch(startLoading());
     const data = {
       appointment_id: _id,
       diagnose_id: diagnose_id,
@@ -24,6 +24,19 @@ const ActivateAppoinment = ({ data, getappointments }) => {
       available_id: available_id,
       patient_id: patient_id,
     };
+
+    dispatch(startLoading());
+
+    if (status) {
+      dispatch(
+        openAlert({
+          status: ERROR,
+          message: "cannot activate again",
+        })
+      );
+
+      return;
+    }
 
     await confirmAppointment(data)
       .then(() => {
@@ -50,9 +63,17 @@ const ActivateAppoinment = ({ data, getappointments }) => {
 
   return (
     <TableCell align="right">
-      <IconButton onClick={() => applyConfirm()}>
-        <PendingIcon />
-      </IconButton>
+      {isAdmin ? (
+        <IconButton onClick={() => applyConfirm()}>
+          <PendingIcon />
+        </IconButton>
+      ) : status === false ? (
+        <IconButton onClick={() => applyConfirm()}>
+          <CloseIcon />
+        </IconButton>
+      ) : (
+        <Typography>Activated</Typography>
+      )}
     </TableCell>
   );
 };

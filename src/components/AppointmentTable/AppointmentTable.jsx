@@ -60,15 +60,14 @@ const AppointmentTable = ({ data, getappointments }) => {
                 Status
               </Typography>
             </TableCell>
-            {isAdmin && (
-              <TableCell align="right">
-                <Typography
-                  sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
-                >
-                  Activate
-                </Typography>
-              </TableCell>
-            )}
+
+            <TableCell align="right">
+              <Typography
+                sx={{ fontSize: "17px", fontWeight: 600, color: "gray" }}
+              >
+                Action
+              </Typography>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -79,7 +78,6 @@ const AppointmentTable = ({ data, getappointments }) => {
               </TableCell>
               <TableCell align="right">
                 <Typography>
-                  {" "}
                   {row.doctor_data.firstName} {row.doctor_data.lastName}
                 </Typography>
               </TableCell>
@@ -98,12 +96,12 @@ const AppointmentTable = ({ data, getappointments }) => {
                   {row.status === true ? "Confirmed" : "Pending"}
                 </Typography>
               </TableCell>
-              {isAdmin && (
-                <ActivateAppoinment
-                  data={row}
-                  getappointments={getappointments}
-                />
-              )}
+
+              <ActivateAppoinment
+                isAdmin={isAdmin}
+                data={row}
+                getappointments={getappointments}
+              />
             </TableRow>
           ))}
         </TableBody>
