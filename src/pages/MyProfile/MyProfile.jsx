@@ -2,13 +2,12 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   FormControl,
-  FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   styled,
   TextField,
   Typography,
@@ -16,7 +15,6 @@ import {
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
-import Checkbox from "@mui/material/Checkbox";
 import { fetchDetails, updateProfile } from "../../store/patientServices";
 import { useDispatch } from "react-redux";
 import {
@@ -113,155 +111,159 @@ const MyProfile = () => {
             />
           </Grid>
           <Grid item md={6}>
-            <Formik
-              initialValues={prfileDetails}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-              validateOnBlur={true}
-              validateOnChange={false}
-            >
-              {({ isSubmitting, errors, touched }) => (
-                <Form>
-                  <Grid container rowSpacing={3.5}>
-                    <Grid item xs={12}>
-                      <Grid container columnSpacing={2} rowSpacing={4}>
-                        <Grid item xs={12} sm={12} md={6}>
-                          <Field
-                            as={StyledInput}
-                            autoFocus
-                            autoComplete="given-name"
-                            name="firstName"
-                            required
-                            fullWidth
-                            id="firstName"
-                            label="First Name"
-                            placeholder="Enter First Name"
-                            error={
-                              touched.firstName && Boolean(errors.firstName)
-                            }
-                            helperText={touched.firstName && errors.firstName}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6}>
-                          <Field
-                            as={StyledInput}
-                            required
-                            fullWidth
-                            id="lastName"
-                            label="Last Name"
-                            name="lastName"
-                            autoComplete="family-name"
-                            placeholder="Enter Last Name"
-                            error={touched.lastName && Boolean(errors.lastName)}
-                            helperText={touched.lastName && errors.lastName}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Grid container columnSpacing={2} rowSpacing={4}>
-                        <Grid item xs={12} sm={12} md={6}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                              Gender
-                            </InputLabel>
+            <Stack sx={{ justifyContent: "center", height: "100%" }}>
+              <Formik
+                initialValues={prfileDetails}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+                validateOnBlur={true}
+                validateOnChange={false}
+              >
+                {({ isSubmitting, errors, touched }) => (
+                  <Form>
+                    <Grid container rowSpacing={3.5}>
+                      <Grid item xs={12}>
+                        <Grid container columnSpacing={2} rowSpacing={4}>
+                          <Grid item xs={12} sm={12} md={6}>
                             <Field
-                              as={Select}
-                              labelId="age-select-label"
-                              id="age-select"
-                              name="gender"
-                              label="Gender"
-                            >
-                              <MenuItem value={"male"}>Male</MenuItem>
-                              <MenuItem value={"female"}>Female</MenuItem>
-                            </Field>
-                          </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={6}>
-                          <FormControl fullWidth>
+                              as={StyledInput}
+                              autoFocus
+                              autoComplete="given-name"
+                              name="firstName"
+                              required
+                              fullWidth
+                              id="firstName"
+                              label="First Name"
+                              placeholder="Enter First Name"
+                              error={
+                                touched.firstName && Boolean(errors.firstName)
+                              }
+                              helperText={touched.firstName && errors.firstName}
+                            />
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={6}>
                             <Field
                               as={StyledInput}
                               required
                               fullWidth
-                              id="dateOfBirth"
-                              name="dateOfBirth"
+                              id="lastName"
+                              label="Last Name"
+                              name="lastName"
                               autoComplete="family-name"
-                              placeholder="Date of Birth"
-                              type="date"
-                              {...(errors.dateOfBirth && {
+                              placeholder="Enter Last Name"
+                              error={
+                                touched.lastName && Boolean(errors.lastName)
+                              }
+                              helperText={touched.lastName && errors.lastName}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <Grid container columnSpacing={2} rowSpacing={4}>
+                          <Grid item xs={12} sm={12} md={6}>
+                            <FormControl fullWidth>
+                              <InputLabel id="demo-simple-select-label">
+                                Gender
+                              </InputLabel>
+                              <Field
+                                as={Select}
+                                labelId="age-select-label"
+                                id="age-select"
+                                name="gender"
+                                label="Gender"
+                              >
+                                <MenuItem value={"male"}>Male</MenuItem>
+                                <MenuItem value={"female"}>Female</MenuItem>
+                              </Field>
+                            </FormControl>
+                          </Grid>
+                          <Grid item xs={12} sm={12} md={6}>
+                            <FormControl fullWidth>
+                              <Field
+                                as={StyledInput}
+                                required
+                                fullWidth
+                                id="dateOfBirth"
+                                name="dateOfBirth"
+                                autoComplete="family-name"
+                                placeholder="Date of Birth"
+                                type="date"
+                                {...(errors.dateOfBirth && {
+                                  error: true,
+                                  helperText: errors?.dateOfBirth?.message,
+                                })}
+                              />
+                            </FormControl>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <Grid container columnSpacing={2} rowSpacing={4}>
+                          <Grid item md={6} xs={12}>
+                            <Field
+                              as={StyledInput}
+                              label={"Create Password"}
+                              placeholder="Create Password"
+                              type="password"
+                              name="password"
+                              sx={{
+                                width: "100%",
+                                fontSize: "18px",
+                                fontWeight: "400",
+                              }}
+                              {...(errors.password && {
                                 error: true,
-                                helperText: errors?.dateOfBirth?.message,
+                                helperText: errors?.password?.message,
                               })}
                             />
-                          </FormControl>
+                          </Grid>
+                          <Grid item md={6} xs={12}>
+                            <Field
+                              as={StyledInput}
+                              placeholder="Confirm Password"
+                              label="Confirm Password"
+                              type="password"
+                              name="confirmPassword"
+                              sx={{
+                                width: "100%",
+                                fontSize: "18px",
+                                fontWeight: "400",
+                              }}
+                              {...(errors.confirmPassword && {
+                                error: true,
+                                helperText: errors?.confirmPassword?.message,
+                              })}
+                            />
+                          </Grid>
                         </Grid>
                       </Grid>
-                    </Grid>
 
-                    <Grid item xs={12}>
-                      <Grid container columnSpacing={2} rowSpacing={4}>
-                        <Grid item md={6} xs={12}>
-                          <Field
-                            as={StyledInput}
-                            label={"Create Password"}
-                            placeholder="Create Password"
-                            type="password"
-                            name="password"
-                            sx={{
-                              width: "100%",
-                              fontSize: "18px",
-                              fontWeight: "400",
-                            }}
-                            {...(errors.password && {
-                              error: true,
-                              helperText: errors?.password?.message,
-                            })}
-                          />
-                        </Grid>
-                        <Grid item md={6} xs={12}>
-                          <Field
-                            as={StyledInput}
-                            placeholder="Confirm Password"
-                            label="Confirm Password"
-                            type="password"
-                            name="confirmPassword"
-                            sx={{
-                              width: "100%",
-                              fontSize: "18px",
-                              fontWeight: "400",
-                            }}
-                            {...(errors.confirmPassword && {
-                              error: true,
-                              helperText: errors?.confirmPassword?.message,
-                            })}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Grid>
-
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <Button
-                        disabled={isSubmitting}
-                        type="submit"
-                        variant="outlined"
-                        sx={{ color: "black", bgcolor: "white" }}
-                        endIcon={<DoneIcon />}
+                      <Grid
+                        item
+                        xs={12}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                        }}
                       >
-                        Update
-                      </Button>
+                        <Button
+                          disabled={isSubmitting}
+                          type="submit"
+                          variant="outlined"
+                          sx={{ color: "black", bgcolor: "white" }}
+                          endIcon={<DoneIcon />}
+                        >
+                          Update
+                        </Button>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Form>
-              )}
-            </Formik>
+                  </Form>
+                )}
+              </Formik>
+            </Stack>
           </Grid>
         </Grid>
       </CardContent>

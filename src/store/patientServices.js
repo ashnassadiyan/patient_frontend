@@ -89,3 +89,7 @@ export const getPendingAppoinment = async (id = "") => {
 export const getDiagnosedReports = async (id = "") => {
   return http.get(`patient/get_diagnosed_reports?patient_id=${id}`);
 };
+
+export const deleteReport = async (id) => {
+  return http.delete(`patient/delete_report/${id}`);
+};

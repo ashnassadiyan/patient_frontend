@@ -1,24 +1,18 @@
 import {
   Alert,
   Box,
-  Button,
   CircularProgress,
   Grid,
   Stack,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   getDiagnosedReports,
   getPendingAppoinment,
 } from "../../store/patientServices";
-import { addToDo } from "../../store/slices/todoSlice";
-
-import { startLoading, stopLoading } from "../../store/slices/alertSlice";
-
 const PatientDashBoard = () => {
-  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [patientDetails, setPatientDetails] = useState({});
   const [OngoingInterviewsData, setOngoingInterviewsData] = useState([

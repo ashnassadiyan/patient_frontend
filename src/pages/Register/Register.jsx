@@ -56,7 +56,18 @@ const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First Name is required"),
   lastName: Yup.string().required("Last Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(5, "Password must be at least 5 characters long")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{5,}$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+    )
+    .test(
+      "no-spaces",
+      "Password cannot contain spaces",
+      (value) => !/\s/.test(value)
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),

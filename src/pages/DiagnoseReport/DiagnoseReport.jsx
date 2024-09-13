@@ -1,7 +1,5 @@
 import {
   Alert,
-  AlertTitle,
-  Box,
   Button,
   Card,
   CardActions,
@@ -12,9 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { getReport } from "../../store/patientServices";
 import {
   openAlert,

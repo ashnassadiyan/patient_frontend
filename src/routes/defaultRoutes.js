@@ -5,6 +5,7 @@ import Register from "../pages/Register/Register";
 import FAQ from "../pages/FAQ";
 import PrivayPolicy from "../pages/PrivacyPolicy";
 import TermsConditions from "../pages/TermsAndConditions";
+import ForgetPassword from "../pages/ForgetPassword";
 
 export const defaultRouter = createBrowserRouter([
   {
@@ -30,5 +31,9 @@ export const defaultRouter = createBrowserRouter([
   {
     element: <TermsConditions />,
     path: "/termsconditions",
+  },
+  {
+    element: <ForgetPassword />,
+    path: "/forgotpassword",
   },
 ]);

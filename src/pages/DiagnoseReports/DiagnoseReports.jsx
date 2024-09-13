@@ -1,12 +1,10 @@
 import {
-  Box,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Grid,
   Stack,
-  Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -17,10 +15,10 @@ import { startLoading, stopLoading } from "../../store/slices/alertSlice";
 const DiagnoseReports = () => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("osc-user"));
+
+  const getAllReports = (id) => {
     dispatch(startLoading());
-    getReports(user.id)
+    getReports(id)
       .then((res) => {
         dispatch(stopLoading());
         setData(res.data.reports);
@@ -29,6 +27,11 @@ const DiagnoseReports = () => {
       .catch(() => {
         dispatch(stopLoading());
       });
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("osc-user"));
+    getAllReports(user.id);
   }, []);
 
   return (
@@ -36,7 +39,7 @@ const DiagnoseReports = () => {
       <CardHeader title="Diagnosed Reports" />
       <CardContent>
         <Grid container>
-          <ReportsTable data={data} />
+          <ReportsTable data={data} getReports={getReports} />
         </Grid>
       </CardContent>
       <CardActions>
