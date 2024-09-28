@@ -214,7 +214,7 @@ const Landing = () => {
                       textAlign: { md: "right", sm: "center" },
                     }}
                   >
-                    OCS
+                   VoiceVita
                   </Typography>
                   <Typography
                     sx={{
