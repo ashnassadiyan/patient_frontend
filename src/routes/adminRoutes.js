@@ -12,7 +12,7 @@ import AddDoctors from "../pages/Admin/Doctors/AddDoctors";
 import EditDoctors from "../pages/Admin/Doctors/Edit/EditDoctors";
 import DoctorAvialability from "../pages/Admin/Avialability/DoctorAvialability";
 import AddAvailability from "../pages/Admin/Avialability/AddAvailability";
-import Patients from "../pages/Admin/Patients";
+import Patients from "../pages/Admin/Patients/Patients";
 import FAQ from "../pages/FAQ";
 
 export const adminRoutes = createBrowserRouter([

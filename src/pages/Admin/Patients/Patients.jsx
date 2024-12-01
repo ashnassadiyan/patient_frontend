@@ -1,6 +1,5 @@
-import { Box, Button, Pagination, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 // import { getPatients } from "../../../store/";
 import SearchIcon from "@mui/icons-material/Search";
 import { getPatients } from "../../../store/patientServices";
@@ -10,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { startLoading, stopLoading } from "../../../store/slices/alertSlice";
 
 const AddDoctors = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [filterFields, setFilterFields] = useState({
     firstName: "",

@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   CardHeader,
@@ -253,6 +252,7 @@ const Symptoms = () => {
           >
             Record
           </Button>
+
           <Button
             onClick={() => diagnose()}
             variant="outlined"
