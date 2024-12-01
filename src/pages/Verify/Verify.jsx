@@ -113,12 +113,6 @@ const Verify = () => {
               sx={{ fontSize: { xs: "14px", md: "20px" }, fontWeight: 500 }}
             >
               Make sure to review your spam folder if OTP is not found ,
-              <span
-                style={{ color: "#2699FF", fontWeight: "bold" }}
-                // onClick={sendCode}
-              >
-                Click here
-              </span>{" "}
             </Typography>
           </Box>
         </Stack>
