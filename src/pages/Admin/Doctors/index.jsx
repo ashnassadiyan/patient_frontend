@@ -15,6 +15,7 @@ const AddDoctors = () => {
     specialized: "",
     page: 1,
     total: 1,
+    totalPages: 1,
   });
   const [doctors, setDoctors] = useState([]);
 
@@ -27,6 +28,11 @@ const AddDoctors = () => {
       .then((res) => {
         console.log(res.data.data);
         setDoctors([...res.data.data]);
+        setFilterFields((state) => ({
+          ...state,
+          total: res.data.total,
+          totalPages: res.data.total_pages,
+        }));
       })
       .catch((error) => {
         console.log(error);
@@ -48,6 +54,8 @@ const AddDoctors = () => {
       page: p,
     }));
   };
+
+  console.log(filterFields, "filterFields");
 
   return (
     <Stack sx={{ gap: COZY }}>
@@ -94,7 +102,7 @@ const AddDoctors = () => {
         <DoctorTable data={doctors} onPageChange={onPageChange} />
         <Stack direction={"row"} sx={{ justifyContent: "flex-end" }}>
           <Pagination
-            count={filterFields.page}
+            count={filterFields.totalPages}
             color="secondary"
             onChange={onPageChange}
           />

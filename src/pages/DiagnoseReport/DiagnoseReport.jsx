@@ -21,6 +21,7 @@ import {
 import { useDispatch } from "react-redux";
 import { ERROR } from "../../components/CustomAlerts/constants";
 import { formatDateToYYYYMMDDHHMM } from "../../helpers/helper";
+import HomeIcon from "@mui/icons-material/Home";
 
 function getSymptomsString(arr) {
   return arr.map((item) => item.symptom).join(", ");
@@ -57,6 +58,12 @@ const DiagnoseReport = () => {
 
   const gotoNext = () => {
     nativigate(`/patient/makeAppoinment/${id}`, {
+      state: diagnosedDetails,
+    });
+  };
+
+  const gotoHome = () => {
+    nativigate(`/patient/dashboard`, {
       state: diagnosedDetails,
     });
   };
@@ -137,8 +144,17 @@ const DiagnoseReport = () => {
       <CardActions>
         <Stack
           direction={"row"}
-          sx={{ width: "100%", justifyContent: "flex-end" }}
+          sx={{ width: "100%", justifyContent: "space-between" }}
         >
+          <Button
+            onClick={() => gotoHome()}
+            variant="outlined"
+            sx={{ color: "black" }}
+            startIcon={<HomeIcon />}
+            // disabled={isEmpty(symptomsSets)}
+          >
+            Dashboard
+          </Button>
           <Button
             onClick={() => gotoNext()}
             variant="outlined"

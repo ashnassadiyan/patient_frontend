@@ -1,17 +1,12 @@
 import React from "react";
 import { formatDateToYYYYMMDDHHMM } from "../../helpers/helper";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import {
-  IconButton,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import ActivateAppoinment from "./ActivateAppoinment";
@@ -88,12 +83,20 @@ const AppointmentTable = ({ data, getappointments }) => {
               </TableCell>
               <TableCell align="right">
                 <Typography>
-                  {row.status === false ? "Pending" : row?.number}
+                  {row.status
+                    ? row?.number
+                    : row?.confirmed_by && !row.status
+                    ? "Cancelled"
+                    : "Pending"}
                 </Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography>
-                  {row.status === true ? "Confirmed" : "Pending"}
+                  {row.status
+                    ? "Confirmed"
+                    : row?.confirmed_by && !row.status
+                    ? "Cancelled"
+                    : "Pending"}
                 </Typography>
               </TableCell>
 

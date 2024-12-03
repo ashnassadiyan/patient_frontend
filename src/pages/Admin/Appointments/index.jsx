@@ -9,9 +9,10 @@ import { startLoading, stopLoading } from "../../../store/slices/alertSlice";
 const Index = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
-  const getappointments = () => {
+
+  const getappointments = async () => {
     dispatch(startLoading());
-    getAllAppointment()
+    await getAllAppointment()
       .then((res) => {
         dispatch(stopLoading());
         setData([...res.data.appointment_exist]);

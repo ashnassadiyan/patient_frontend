@@ -21,7 +21,12 @@ const MakeAppoinment = () => {
 
   useEffect(() => {
     dispatch(startLoading());
-    getDoctors({ specialized: location?.state?.doctor })
+    getDoctors({
+      specialized: decodeURIComponent(location?.state?.doctor)?.replace(
+        /\s+/g,
+        ""
+      ),
+    })
       .then((res) => {
         dispatch(stopLoading());
         setDoctorsList(res.data.data);
@@ -30,6 +35,8 @@ const MakeAppoinment = () => {
         dispatch(stopLoading());
       });
   }, [location.state]);
+
+  console.log(location?.state?.doctor);
 
   return (
     <Card variant="outlined">

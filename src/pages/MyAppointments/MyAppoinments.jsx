@@ -9,10 +9,10 @@ const MyAppoinments = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  const getappointment = () => {
     const user = JSON.parse(localStorage.getItem("osc-user"));
     dispatch(startLoading());
-    getAppointment(user.id)
+    getAppointment(user?.id)
       .then((res) => {
         dispatch(stopLoading());
         setData(res.data.appointment_exist);
@@ -20,7 +20,12 @@ const MyAppoinments = () => {
       .catch(() => {
         dispatch(stopLoading());
       });
+  };
+
+  useEffect(() => {
+    getappointment();
   }, []);
+
   return (
     <div>
       <Card sx={{ borderRadius: "12px", boxShadow: "none" }}>
@@ -29,7 +34,7 @@ const MyAppoinments = () => {
         </Typography>
 
         <CardContent>
-          <AppointmentTable data={data} />
+          <AppointmentTable data={data} getappointments={getappointment} />
         </CardContent>
       </Card>
     </div>
